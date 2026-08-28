@@ -59,7 +59,7 @@ tasks.register('configureCppProject', Exec) {
     }
 
     if (useConda) {
-        cmakeArgs += "-DCMAKE_PREFIX_PATH=$CONDA_PREFIX"
+        cmakeArgs += "-DCMAKE_PREFIX_PATH=${System.getenv('CONDA_PREFIX')}"
     }
 
     cmakeArgs += 'src/main/cpp'
