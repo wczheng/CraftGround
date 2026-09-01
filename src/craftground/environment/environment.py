@@ -70,6 +70,7 @@ class CraftGroundEnvironment(gym.Env):
         verbose_jvm: bool = False,
         profile: bool = False,
         profile_jni: bool = False,
+        runtime_dir: Optional[str] = None,
     ):
         self.action_space_version = action_space_version
         self.action_space = declare_action_space(action_space_version)
@@ -97,6 +98,9 @@ class CraftGroundEnvironment(gym.Env):
         self.verbose_jvm = verbose_jvm
         self.profile = profile
         self.profile_jni = profile_jni
+        self.runtime_dir = (
+            os.path.abspath(os.fspath(runtime_dir)) if runtime_dir is not None else None
+        )
 
         self.render_alternating_eyes = render_alternating_eyes
         self.render_alternating_eyes_counter = 0
@@ -229,13 +233,14 @@ class CraftGroundEnvironment(gym.Env):
         self.start_server(seed=seed)
 
     def start_server(self, seed: int):
-        # Remove orphan java processes
-        self.ipc.remove_orphan_java_processes()
         # Prepare command
         my_env = os.environ.copy()
         my_env["PORT"] = str(self.ipc.port)
         my_env["USE_SHARED_MEMORY"] = str(int(self.use_shared_memory))
         my_env["VERBOSE"] = str(int(self.verbose_jvm))
+        if self.runtime_dir is not None:
+            os.makedirs(self.runtime_dir, exist_ok=True)
+            my_env["CRAFTGROUND_RUN_DIR"] = self.runtime_dir
         if self.track_native_memory:
             my_env["CRAFTGROUND_JVM_NATIVE_TRACKING"] = "detail"
         if self.native_debug:

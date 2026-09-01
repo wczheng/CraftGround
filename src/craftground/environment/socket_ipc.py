@@ -1,11 +1,9 @@
 import os
-import signal
 import struct
 import threading
 import time
 from typing import Dict, List, Optional, Union
 
-import psutil
 from craftground.buffered_socket import BufferedSocket
 from craftground.csv_logger import CsvLogger
 from craftground.environment.action_space import action_v2_dict_to_message, no_op_v2
@@ -27,7 +25,6 @@ class SocketIPC(IPCInterface):
     ):
         self.logger = logger
         self.find_free_port = find_free_port
-        self.remove_orphan_java_processes()
         self.port = self.check_port(port)
         self.sock = None
         self.initial_environment = initial_environment
@@ -106,44 +103,6 @@ class SocketIPC(IPCInterface):
             socket_path = f"/tmp/minecraftrl_{self.port}.sock"
             if os.path.exists(socket_path):
                 os.remove(socket_path)
-
-    def remove_orphan_java_processes(self):  # noqa: C901
-        self.logger.log("Removing orphan Java processes...")
-        target_directory = "/tmp"
-        file_pattern = "minecraftrl_"
-        file_usage = {}
-        no_such_processes = 0
-        access_denied_processes = 0
-        for proc in psutil.process_iter(["pid", "name"]):
-            try:
-                for file in proc.open_files():
-                    if (
-                        file.path.startswith(target_directory)
-                        and file_pattern in file.path
-                    ):
-                        if file.path not in file_usage:
-                            file_usage[file.path] = []
-                        file_usage[file.path].append(proc.info)
-            except psutil.NoSuchProcess:
-                no_such_processes += 1
-                continue
-            except psutil.AccessDenied:
-                access_denied_processes += 1
-                continue
-            except Exception as e:
-                print(f"Error: {e}")
-                continue
-
-        for file_path, processes in file_usage.items():
-            if all(proc["name"].lower() == "java" for proc in processes):
-                for proc in processes:
-                    os.kill(proc["pid"], signal.SIGTERM)
-                    print(f"Killed Java process {proc['pid']} using file {file_path}")
-                os.remove(file_path)
-                print(f"Removed {file_path}")
-        print(
-            f"Removed orphan Java processes: {access_denied_processes} access denied, {no_such_processes} no such process"
-        )
 
     def send_commands(self, commands: List[str]):
         # print("Sending command")

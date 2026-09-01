@@ -27,6 +27,8 @@ def make(
     verbose_gradle=False,
     profile_jni=False,
     no_threaded_optimizations=True,
+    find_free_port=True,
+    runtime_dir=None,
 ) -> CraftGroundEnvironment:
     if not initial_env_config:
         initial_env_config = InitialEnvironmentConfig()
@@ -36,6 +38,7 @@ def make(
         env_path=env_path,
         mc_version=mc_version,
         port=port,
+        find_free_port=find_free_port,
         action_space_version=action_space_version,
         render_action=render_action,
         render_alternating_eyes=render_alternating_eyes,
@@ -51,4 +54,5 @@ def make(
         verbose_gradle=verbose_gradle,
         use_shared_memory=use_shared_memory,
         profile_jni=profile_jni,
+        runtime_dir=runtime_dir,
     )

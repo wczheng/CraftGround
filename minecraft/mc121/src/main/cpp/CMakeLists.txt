@@ -14,14 +14,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(GL_CAPTURE_DIR ${CMAKE_CURRENT_LIST_DIR}/../../../../../shared-native/gl-capture)
 
 include(FetchContent)
-
-FetchContent_Declare(
-    glm
-    GIT_REPOSITORY https://github.com/g-truc/glm.git
-    GIT_TAG 2d4c4b4dd31fde06cfffad7915c2b3006402322f #refs/tags/1.0.1 -> latest main (to avoid CMake version issue)
-)
-
-FetchContent_MakeAvailable(glm)
+find_package(glm CONFIG REQUIRED)
 
 set(CRAFGROUND_NATIVE_DEBUG $ENV{CRAFGROUND_NATIVE_DEBUG})
 if(CRAFGROUND_NATIVE_DEBUG)

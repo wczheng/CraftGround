@@ -1,4 +1,3 @@
-import signal
 import threading
 from time import sleep
 import pytest
@@ -87,23 +86,6 @@ def test_read_observation(mock_socket, socket_ipc):
     observation = socket_ipc.read_observation()
 
     assert isinstance(observation, ObservationSpaceMessage)
-
-
-@patch("os.remove")
-@patch("os.kill")
-def test_remove_orphan_java_processes(mock_kill, mock_remove, socket_ipc):
-    mock_remove.side_effect = lambda path: path == "/tmp/minecraftrl_8000.sock"
-    with patch("psutil.process_iter") as mock_process_iter:
-        mock_process = MagicMock()
-        mock_process.open_files.return_value = [
-            MagicMock(path="/tmp/minecraftrl_8000.sock")
-        ]
-        mock_process.info = {"name": "java", "pid": 1234}
-        mock_process_iter.return_value = [mock_process]
-
-        socket_ipc.remove_orphan_java_processes()
-
-        mock_kill.assert_called_with(1234, signal.SIGTERM)
 
 
 @patch("craftground.buffered_socket.socket.socket")
