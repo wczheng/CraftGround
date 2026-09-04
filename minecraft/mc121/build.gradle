@@ -123,10 +123,6 @@ tasks.named('build').configure {
 }
 
 tasks.named('runClient') {
-    def runtimeDirectory = System.getenv("CRAFTGROUND_RUN_DIR")
-    if (runtimeDirectory) {
-        workingDir file(runtimeDirectory)
-    }
     doFirst {
         def maxMemory = System.getenv("CRAFTGROUND_JVM_MAX_MEMORY") ?: "3G"
         def enabledJmx = System.getenv("CRAFTGROUND_JVM_JMX_ENABLED") ?: "false"
@@ -243,6 +239,14 @@ java {
 
 loom {
     accessWidenerPath = file("src/main/resources/minecraftenv.accesswidener")
+    runs {
+        client {
+            def runtimeDirectory = System.getenv("CRAFTGROUND_RUN_DIR")
+            if (runtimeDirectory) {
+                runDir project.relativePath(file(runtimeDirectory))
+            }
+        }
+    }
 }
 
 sourceSets {

@@ -973,6 +973,24 @@ class MinecraftEnv :
         if (command.startsWith("/")) {
             command = command.substring(1)
         }
+        if (command.startsWith("setfood ")) {
+            val level = command.substringAfter("setfood ").trim().toInt()
+            player.hungerManager.foodLevel = level
+            player.hungerManager.saturationLevel = 0.0f
+            val server = MinecraftClient.getInstance().server
+            val serverPlayer =
+                server?.playerManager?.getPlayer(player.uuid)
+                    ?: server?.playerManager?.playerList?.firstOrNull()
+            if (serverPlayer != null) {
+                serverPlayer.hungerManager.foodLevel = level
+                serverPlayer.hungerManager.saturationLevel = 0.0f
+                printWithTime("Set food level: $level")
+            } else {
+                printWithTime("setfood $level: server player missing")
+            }
+            csvLogger.log("Set food level: $level")
+            return
+        }
         player.networkHandler.sendChatCommand(command)
         printWithTime("End send command: $command")
         csvLogger.log("End send command: $command")
