@@ -27,6 +27,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.MinecraftClient.IS_SYSTEM_MAC
 import net.minecraft.client.gui.screen.DeathScreen
 import net.minecraft.client.network.ClientPlayerEntity
+import net.minecraft.client.render.ChunkBuilderMode
 import net.minecraft.client.render.BackgroundRenderer
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.EntityType
@@ -619,6 +620,9 @@ class MinecraftEnv :
                 player.prevZ = oldPrevZ
                 //                player.setPos(oldX, oldY, oldZ)
             } else {
+                // Capture this decision's scene, not the previous display frame.
+                client.options.chunkBuilderMode.value = ChunkBuilderMode.NEARBY
+                render(client)
                 csvLogger.profileStartPrint(
                     "Minecraft_env/onInitialize/EndWorldTick/SendObservation/Prepare/SingleEye/Screenshot",
                 )
