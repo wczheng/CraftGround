@@ -246,7 +246,6 @@ class MinecraftEnv :
         ClientTickEvents.END_WORLD_TICK.register(
             ClientTickEvents.EndWorldTick { world: ClientWorld ->
                 // allow server to start tick
-                tickSynchronizer.notifyServerTickStart()
                 // wait until server tick ends
                 //            printWithTime("Wait server world tick ends")
                 csvLogger.profileStartPrint(
@@ -256,6 +255,7 @@ class MinecraftEnv :
                     csvLogger.log("Skip waiting server world tick ends")
                 } else {
                     csvLogger.log("Wait server world tick ends")
+                    tickSynchronizer.notifyServerTickStart()
                     tickSynchronizer.waitForServerTickCompletion()
                 }
                 csvLogger.profileEndPrint(
@@ -448,8 +448,12 @@ class MinecraftEnv :
             printWithTime("Will terminate")
             csvLogger.log("Will terminate")
             tickSynchronizer.terminate()
-            // remove the world file
-            client.server?.getSavePath(WorldSavePath.ROOT)?.let {
+            // Stop writers before deleting the world; concurrent chunk saves
+            // otherwise recreate files during recursive deletion.
+            val server = client.server
+            val worldPath = server?.getSavePath(WorldSavePath.ROOT)?.normalize()
+            server?.stop(true)
+            worldPath?.let {
                 try {
                     it.deleteRecursively()
                     printWithTime("Successfully deleted the world $it")
@@ -678,6 +682,18 @@ class MinecraftEnv :
                     foodLevel = player.hungerManager.foodLevel.toDouble()
                     saturationLevel = player.hungerManager.saturationLevel.toDouble()
                     isDead = player.isDead
+                    selectedSlot = player.inventory.selectedSlot
+                    worldSeed = client.server!!.overworld.seed
+                    timeOfDay = client.server!!.overworld.timeOfDay
+                    clientTimeOfDay = world.timeOfDay
+                    // Read completed integrated-server ticks, not delayed REQUEST_STATS replies.
+                    val nativeStats = client.server!!.playerManager.getPlayer(player.uuid)!!.statHandler
+                    for (item in Registries.ITEM) {
+                        val used = nativeStats.getStat(Stats.USED.getOrCreateStat(item))
+                        val id = Registries.ITEM.getId(item).toString()
+                        if (used > 0) usedItems[id] = used
+                    }
+                    pickedUpItems.putAll(ItemPickupTracker.get(player.uuid))
                     val allItems =
                         sequenceOf(
                             player.inventory.main,
@@ -713,7 +729,7 @@ class MinecraftEnv :
                     for (miscStatKey in initialEnvironment.miscStatKeysList) {
                         val key = Registries.CUSTOM_STAT.get(Identifier.of("minecraft", miscStatKey))
                         miscStatistics[miscStatKey] =
-                            player.statHandler.getStat(Stats.CUSTOM.getOrCreateStat(key))
+                            nativeStats.getStat(Stats.CUSTOM.getOrCreateStat(key))
                     }
                     entityListener?.run {
                         for (entity in entities) {
@@ -740,7 +756,7 @@ class MinecraftEnv :
                     //                    bobberThrown = serverPlayerEntity?.fishHook != null
                     bobberThrown = player.fishHook != null
                     experience = player.totalExperience
-                    worldTime = world.time // world tick, monotonic increasing
+                    worldTime = client.server!!.overworld.time // Authoritative simulation ticks, no client clock corrections.
                     lastDeathMessage = deathMessageCollector?.lastDeathMessage?.firstOrNull() ?: ""
                     image2 = imageByteString2
 

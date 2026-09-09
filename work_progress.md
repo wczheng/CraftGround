@@ -1,61 +1,21 @@
 # Work Progress
 
-## Last verified
+Last verified: 2026-09-09T22:20:04+08:00 (Asia/Shanghai).
 
-- 2026-08-28 21:42 CST (Asia/Shanghai)
+## Current objective and handoff
 
-## Current objective and status
+Minecraft1.21 native boundary fixes for the parent VAFM survival environment are implemented and accepted on Linux/Xvfb. No training. Matching Python proto/native sources required; mc262 is not verified. Parent evidence: `../artifacts/minimal-open-survival/`; concise report: [acceptance](../docs/native-survival-acceptance.md).
 
-- Create several distinct first-person GIF cases of CraftGround API control on the current Apple Silicon Mac.
-- Status: complete; five scripted cases were recorded and visually checked.
+## Verified changes
 
-## Handoff summary
+Actual selected slot, server seed/tick/day clock and client day clock, use/actual partial-pickup counters, diagnostic block state; request-indexed tick synchronization; staged clock-ready reset supported by the parent adapter. Difficulty config is now applied, empty resource paths ignored, heightmap samples surface blocks. Native exit stops server writes before deletion; Python waits before escalating termination and captures descendants before launcher exit, because Gradle single-use daemons create separate process groups. Existing psutil handles descendant cleanup.
 
-- Use the existing Conda environment: `conda activate craftground`.
-- Run experiments from the project root. An experiment must create the environment with `craftground.make(...)`, call `env.reset()` to launch Minecraft, and close it with `env.close()`.
-- `examples/visual_demo.py` records five API-driven cases from `obs["pov"]` in one Minecraft session: movement, look-around, strafing, camera pitch, and zombie attack.
-- Outputs are under `artifacts/craftground_*.gif`; the demo exited cleanly after saving all five files.
-- Default to `mc_version="1.21"`; the 26.2 path is not part of the verified run.
+## Evidence and limits
 
-## Active topics
+Parent native mechanisms11/11, layouts6/6 with54food blocks, oracle24,000ticks and matched hunger controls PASS. Native close returns0 and removes worlds. Parent `tests/test_native_survival.py` now has6 passing checks, including graceful/SIGTERM/SIGKILL and real separate-session child cleanup. Eight additional held-out terrain worlds and72food blocks passed fixed replay. Previously leaking rejected ocean-world cleanup passes with zero task JVMs remaining; evidence in parent `evaluation-worlds/cleanup-result.json`. Existing pytest suite NOT RUN because pytest is absent. Earlier Apple Silicon visual-demo results remain historical, not reverified on this Linux host.
 
-- Minecraft 1.21 launch — complete — verified 2026-08-27 20:07 CST — launch works; client is stopped.
-- First-person visualization — complete — verified 2026-08-28 21:42 CST — five GIF cases generated and visually checked.
+## Next actions and open questions
 
-## Recent verified milestones
+No active native blocker. Keep protocol/client/runtime aligned for parent training work; mc262 support needs its own validation if requested. Do not read server chunks on the render thread (paused-server deadlock). Vanilla PICKED_UP misses partial insertion; use actual inventory-transfer hook.
 
-- Built the Minecraft 1.21 native C++/JNI/Apple module and Gradle Java sources.
-- Fixed Conda prefix discovery in `minecraft/mc121/build.gradle` and `minecraft/mc262/build.gradle`.
-- Launched Minecraft 1.21 with Fabric through CraftGround and entered a generated local world.
-- Relaunched at 1280x720 with a continuous Python no-op action loop so rendering keeps advancing.
-- Added and ran `examples/visual_demo.py`; it records forward, turn, and run/jump actions with action and position overlays.
-- Extended the same script to record look-around, strafe, camera-pitch, and sword-attack cases without restarting Minecraft between cases.
-
-## Decisions and assumptions
-
-- Minecraft 1.21 is the verified default runtime.
-- Gradle reads `CONDA_PREFIX` from the process environment when `CRAFTGROUND_USE_CONDA=true`.
-
-## Blockers and open questions
-
-- No blocker for launching Minecraft.
-- Automated screenshots are unavailable because macOS denies `screencapture` access to the executor.
-
-## Exact next actions
-
-1. View the five `artifacts/craftground_*.gif` outputs.
-2. Re-run with `conda run --no-capture-output -n craftground python examples/visual_demo.py` when needed.
-
-## Verification evidence
-
-- CraftGround native module imports successfully and the Apple MPS backend is available.
-- Launch output shows `CRAFTGROUND_READY 1280x720`; logs show Minecraft 1.21, IPC port 8001, integrated server startup, and local player login at 20:02 CST.
-- After sending `SIGTERM` to the launch Gradle wrapper and Minecraft client, `pgrep` found no remaining CraftGround launcher or Minecraft client process.
-- `examples/visual_demo.py` passed `py_compile` and `git diff --check`.
-- Generated GIFs are all 640x360 with differing first/last frames: movement 80 frames, look-around 80, strafe 100, camera pitch 60, and attack 75.
-- Four-frame contact sheets for every new case were visually inspected; labels, scene motion, sword, zombie, and attack animation render correctly.
-- The recording command exited with status 0 after `env.close()`.
-
-## Reusable workflow candidates
-
-- None yet.
+No new reusable skill. These changes are published with the parent VAFM survival release on the matching `world-setting-dreamerv3-audit` branch; the parent pins the exact revision.

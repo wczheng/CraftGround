@@ -9,7 +9,8 @@
     "EntityCollisionDetectorMixin",
     "RenderMixin",
     "SaveWorldMixin",
-    "ServerPlayNetworkHandlerDisableSpamChecker"
+    "ServerPlayNetworkHandlerDisableSpamChecker",
+    "ItemPickupMixin"
   ],
   "client": [
     "ChatVisibleMessageAccessor",

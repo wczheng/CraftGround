@@ -95,6 +95,31 @@ public object BlockInfoKt {
     public fun clearTranslationKey() {
       _builder.clearTranslationKey()
     }
+
+    /**
+     * ```
+     * Native state string for diagnostic raycasts.
+     * ```
+     *
+     * `string block_state = 5;`
+     */
+    public var blockState: kotlin.String
+      @JvmName("getBlockState")
+      get() = _builder.blockState
+      @JvmName("setBlockState")
+      set(value) {
+        _builder.blockState = value
+      }
+    /**
+     * ```
+     * Native state string for diagnostic raycasts.
+     * ```
+     *
+     * `string block_state = 5;`
+     */
+    public fun clearBlockState() {
+      _builder.clearBlockState()
+    }
   }
 }
 @kotlin.jvm.JvmSynthetic

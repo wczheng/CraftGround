@@ -1619,6 +1619,309 @@ public object ObservationSpaceMessageKt {
 
     public val ObservationSpaceMessageKt.Dsl.lidarResultOrNull: com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.LidarResult?
       get() = _builder.lidarResultOrNull
+
+    /**
+     * ```
+     * Actual native hotbar selection, 0..8.
+     * ```
+     *
+     * `optional int32 selected_slot = 45;`
+     */
+    public var selectedSlot: kotlin.Int
+      @JvmName("getSelectedSlot")
+      get() = _builder.selectedSlot
+      @JvmName("setSelectedSlot")
+      set(value) {
+        _builder.selectedSlot = value
+      }
+    /**
+     * ```
+     * Actual native hotbar selection, 0..8.
+     * ```
+     *
+     * `optional int32 selected_slot = 45;`
+     */
+    public fun clearSelectedSlot() {
+      _builder.clearSelectedSlot()
+    }
+    /**
+     * ```
+     * Actual native hotbar selection, 0..8.
+     * ```
+     *
+     * `optional int32 selected_slot = 45;`
+     * @return Whether the selectedSlot field is set.
+     */
+    public fun hasSelectedSlot(): kotlin.Boolean {
+      return _builder.hasSelectedSlot()
+    }
+
+    /**
+     * An uninstantiable, behaviorless type to represent the field in
+     * generics.
+     */
+    @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
+    public class UsedItemsProxy private constructor() : com.google.protobuf.kotlin.DslProxy()
+    /**
+     * ```
+     * Native cumulative item-use statistics.
+     * ```
+     *
+     * `map<string, int32> used_items = 46;`
+     */
+     public val usedItems: com.google.protobuf.kotlin.DslMap<kotlin.String, kotlin.Int, UsedItemsProxy>
+      @kotlin.jvm.JvmSynthetic
+      @JvmName("getUsedItemsMap")
+      get() = com.google.protobuf.kotlin.DslMap(
+        _builder.usedItemsMap
+      )
+    /**
+     * ```
+     * Native cumulative item-use statistics.
+     * ```
+     *
+     * `map<string, int32> used_items = 46;`
+     */
+    @JvmName("putUsedItems")
+    public fun com.google.protobuf.kotlin.DslMap<kotlin.String, kotlin.Int, UsedItemsProxy>
+      .put(key: kotlin.String, value: kotlin.Int) {
+         _builder.putUsedItems(key, value)
+       }
+    /**
+     * ```
+     * Native cumulative item-use statistics.
+     * ```
+     *
+     * `map<string, int32> used_items = 46;`
+     */
+    @kotlin.jvm.JvmSynthetic
+    @JvmName("setUsedItems")
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun com.google.protobuf.kotlin.DslMap<kotlin.String, kotlin.Int, UsedItemsProxy>
+      .set(key: kotlin.String, value: kotlin.Int) {
+         put(key, value)
+       }
+    /**
+     * ```
+     * Native cumulative item-use statistics.
+     * ```
+     *
+     * `map<string, int32> used_items = 46;`
+     */
+    @kotlin.jvm.JvmSynthetic
+    @JvmName("removeUsedItems")
+    public fun com.google.protobuf.kotlin.DslMap<kotlin.String, kotlin.Int, UsedItemsProxy>
+      .remove(key: kotlin.String) {
+         _builder.removeUsedItems(key)
+       }
+    /**
+     * ```
+     * Native cumulative item-use statistics.
+     * ```
+     *
+     * `map<string, int32> used_items = 46;`
+     */
+    @kotlin.jvm.JvmSynthetic
+    @JvmName("putAllUsedItems")
+    public fun com.google.protobuf.kotlin.DslMap<kotlin.String, kotlin.Int, UsedItemsProxy>
+      .putAll(map: kotlin.collections.Map<kotlin.String, kotlin.Int>) {
+         _builder.putAllUsedItems(map)
+       }
+    /**
+     * ```
+     * Native cumulative item-use statistics.
+     * ```
+     *
+     * `map<string, int32> used_items = 46;`
+     */
+    @kotlin.jvm.JvmSynthetic
+    @JvmName("clearUsedItems")
+    public fun com.google.protobuf.kotlin.DslMap<kotlin.String, kotlin.Int, UsedItemsProxy>
+      .clear() {
+         _builder.clearUsedItems()
+       }
+
+    /**
+     * An uninstantiable, behaviorless type to represent the field in
+     * generics.
+     */
+    @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
+    public class PickedUpItemsProxy private constructor() : com.google.protobuf.kotlin.DslProxy()
+    /**
+     * ```
+     * Actual native inventory transfers, including partial pickups.
+     * ```
+     *
+     * `map<string, int32> picked_up_items = 47;`
+     */
+     public val pickedUpItems: com.google.protobuf.kotlin.DslMap<kotlin.String, kotlin.Int, PickedUpItemsProxy>
+      @kotlin.jvm.JvmSynthetic
+      @JvmName("getPickedUpItemsMap")
+      get() = com.google.protobuf.kotlin.DslMap(
+        _builder.pickedUpItemsMap
+      )
+    /**
+     * ```
+     * Actual native inventory transfers, including partial pickups.
+     * ```
+     *
+     * `map<string, int32> picked_up_items = 47;`
+     */
+    @JvmName("putPickedUpItems")
+    public fun com.google.protobuf.kotlin.DslMap<kotlin.String, kotlin.Int, PickedUpItemsProxy>
+      .put(key: kotlin.String, value: kotlin.Int) {
+         _builder.putPickedUpItems(key, value)
+       }
+    /**
+     * ```
+     * Actual native inventory transfers, including partial pickups.
+     * ```
+     *
+     * `map<string, int32> picked_up_items = 47;`
+     */
+    @kotlin.jvm.JvmSynthetic
+    @JvmName("setPickedUpItems")
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun com.google.protobuf.kotlin.DslMap<kotlin.String, kotlin.Int, PickedUpItemsProxy>
+      .set(key: kotlin.String, value: kotlin.Int) {
+         put(key, value)
+       }
+    /**
+     * ```
+     * Actual native inventory transfers, including partial pickups.
+     * ```
+     *
+     * `map<string, int32> picked_up_items = 47;`
+     */
+    @kotlin.jvm.JvmSynthetic
+    @JvmName("removePickedUpItems")
+    public fun com.google.protobuf.kotlin.DslMap<kotlin.String, kotlin.Int, PickedUpItemsProxy>
+      .remove(key: kotlin.String) {
+         _builder.removePickedUpItems(key)
+       }
+    /**
+     * ```
+     * Actual native inventory transfers, including partial pickups.
+     * ```
+     *
+     * `map<string, int32> picked_up_items = 47;`
+     */
+    @kotlin.jvm.JvmSynthetic
+    @JvmName("putAllPickedUpItems")
+    public fun com.google.protobuf.kotlin.DslMap<kotlin.String, kotlin.Int, PickedUpItemsProxy>
+      .putAll(map: kotlin.collections.Map<kotlin.String, kotlin.Int>) {
+         _builder.putAllPickedUpItems(map)
+       }
+    /**
+     * ```
+     * Actual native inventory transfers, including partial pickups.
+     * ```
+     *
+     * `map<string, int32> picked_up_items = 47;`
+     */
+    @kotlin.jvm.JvmSynthetic
+    @JvmName("clearPickedUpItems")
+    public fun com.google.protobuf.kotlin.DslMap<kotlin.String, kotlin.Int, PickedUpItemsProxy>
+      .clear() {
+         _builder.clearPickedUpItems()
+       }
+
+    /**
+     * ```
+     * Diagnostic only, authoritative generator seed.
+     * ```
+     *
+     * `optional int64 world_seed = 48;`
+     */
+    public var worldSeed: kotlin.Long
+      @JvmName("getWorldSeed")
+      get() = _builder.worldSeed
+      @JvmName("setWorldSeed")
+      set(value) {
+        _builder.worldSeed = value
+      }
+    /**
+     * ```
+     * Diagnostic only, authoritative generator seed.
+     * ```
+     *
+     * `optional int64 world_seed = 48;`
+     */
+    public fun clearWorldSeed() {
+      _builder.clearWorldSeed()
+    }
+    /**
+     * ```
+     * Diagnostic only, authoritative generator seed.
+     * ```
+     *
+     * `optional int64 world_seed = 48;`
+     * @return Whether the worldSeed field is set.
+     */
+    public fun hasWorldSeed(): kotlin.Boolean {
+      return _builder.hasWorldSeed()
+    }
+
+    /**
+     * ```
+     * Diagnostic only, separate from simulation ticks.
+     * ```
+     *
+     * `int64 time_of_day = 49;`
+     */
+    public var timeOfDay: kotlin.Long
+      @JvmName("getTimeOfDay")
+      get() = _builder.timeOfDay
+      @JvmName("setTimeOfDay")
+      set(value) {
+        _builder.timeOfDay = value
+      }
+    /**
+     * ```
+     * Diagnostic only, separate from simulation ticks.
+     * ```
+     *
+     * `int64 time_of_day = 49;`
+     */
+    public fun clearTimeOfDay() {
+      _builder.clearTimeOfDay()
+    }
+
+    /**
+     * ```
+     * Diagnose rendered clock synchronization.
+     * ```
+     *
+     * `optional int64 client_time_of_day = 50;`
+     */
+    public var clientTimeOfDay: kotlin.Long
+      @JvmName("getClientTimeOfDay")
+      get() = _builder.clientTimeOfDay
+      @JvmName("setClientTimeOfDay")
+      set(value) {
+        _builder.clientTimeOfDay = value
+      }
+    /**
+     * ```
+     * Diagnose rendered clock synchronization.
+     * ```
+     *
+     * `optional int64 client_time_of_day = 50;`
+     */
+    public fun clearClientTimeOfDay() {
+      _builder.clearClientTimeOfDay()
+    }
+    /**
+     * ```
+     * Diagnose rendered clock synchronization.
+     * ```
+     *
+     * `optional int64 client_time_of_day = 50;`
+     * @return Whether the clientTimeOfDay field is set.
+     */
+    public fun hasClientTimeOfDay(): kotlin.Boolean {
+      return _builder.hasClientTimeOfDay()
+    }
   }
 }
 @kotlin.jvm.JvmSynthetic

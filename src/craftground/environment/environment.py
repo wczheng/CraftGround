@@ -11,6 +11,7 @@ import weakref
 
 import gymnasium as gym
 import numpy as np
+import psutil
 from gymnasium.core import ActType, RenderFrame
 
 from ..proto.observation_space_pb2 import ObservationSpaceMessage
@@ -395,6 +396,29 @@ class CraftGroundEnvironment(gym.Env):
         self.queued_commands.extend(commands)
 
     def terminate(self):
+        # Gradle's single-use daemon starts a separate process group. Capture the
+        # descendants before the launcher exits and reparents them.
+        try:
+            children = psutil.Process(self.process.pid).children(recursive=True) if self.process else []
+        except psutil.NoSuchProcess:
+            children = []
+        try:
+            self._terminate_launcher()
+        finally:
+            for child in children:
+                try:
+                    child.terminate()
+                except psutil.NoSuchProcess:
+                    pass
+            _, alive = psutil.wait_procs(children, timeout=5)
+            for child in alive:
+                try:
+                    child.kill()
+                except psutil.NoSuchProcess:
+                    pass
+            psutil.wait_procs(alive, timeout=5)
+
+    def _terminate_launcher(self):
         self.server_event = None
         try:
             self.ipc.destroy()
@@ -404,6 +428,17 @@ class CraftGroundEnvironment(gym.Env):
         p = self.process
         if not p:
             self.logger.log("No process to terminate")
+            return
+
+        # IPC destroy requested native exit. Let it stop chunk writers and clean
+        # the world before escalating to process-group termination.
+        try:
+            p.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            pass
+        else:
+            self.process = None
+            self.logger.log("Native process exited cleanly")
             return
 
         pid = p.pid

@@ -51,7 +51,7 @@ fun HitResult.toMessage(world: World) =
                 type = com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.HitResult.Type.BLOCK
                 val blockPos = (this@toMessage as BlockHitResult).blockPos
                 val block = world.getBlockState(blockPos).block
-                targetBlock = block.toMessage(blockPos)
+                targetBlock = block.toMessage(blockPos).toBuilder().setBlockState(world.getBlockState(blockPos).toString()).build()
             }
         }
 

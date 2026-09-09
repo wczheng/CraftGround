@@ -1,4 +1,5 @@
 import signal
+import subprocess
 import pytest
 from unittest.mock import MagicMock, patch
 
@@ -8,7 +9,6 @@ from craftground.environment.observation_converter import ObservationConverter
 from craftground.environment.socket_ipc import SocketIPC
 from craftground.initial_environment_config import InitialEnvironmentConfig
 from craftground.screen_encoding_modes import ScreenEncodingMode
-from craftground.environment.boost_ipc import BoostIPC
 
 
 @pytest.fixture
@@ -44,6 +44,8 @@ def test_initialize_socket_environment(mock_ipc_class, mock_initial_env):
 
 @patch("craftground.environment.boost_ipc.BoostIPC")
 def test_initialize_boost_environment(mock_ipc_class, mock_initial_env):
+    from craftground.environment.boost_ipc import BoostIPC
+
     mock_ipc_instance = MagicMock(spec=BoostIPC)
     mock_ipc_class.return_value = mock_ipc_instance
 
@@ -117,14 +119,23 @@ def test_close_environment(mock_close, environment):
     mock_close.assert_called()
 
 
+@pytest.mark.parametrize("timeouts", [0, 1, 2])
 @patch("os.getpgid")
 @patch("os.killpg")
-def test_terminate_environment(mock_kill, mock_getpgid, environment):
-    environment.process = MagicMock()
-    environment.process.pid = 1234
+def test_terminate_environment(mock_kill, mock_getpgid, environment, timeouts):
+    process = MagicMock()
+    process.pid = 1234
+    process.wait.side_effect = [subprocess.TimeoutExpired("minecraft", 10)] * timeouts + [0]
+    environment.process = process
     mock_getpgid.return_value = -1234
 
-    environment.terminate()
+    with patch("craftground.environment.environment.psutil.Process") as mock_process:
+        mock_process.return_value.children.return_value = []
+        environment.terminate()
 
-    mock_getpgid.assert_called_with(1234)
-    mock_kill.assert_called_with(-1234, signal.SIGKILL)
+    assert environment.process is None
+    assert [call.args[1] for call in mock_kill.call_args_list] == [signal.SIGTERM, signal.SIGKILL][:timeouts]
+    if timeouts:
+        mock_getpgid.assert_called_with(1234)
+    else:
+        mock_getpgid.assert_not_called()

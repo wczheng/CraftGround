@@ -14,6 +14,7 @@ message BlockInfo {
   int32 y = 2;
   int32 z = 3;
   string translation_key = 4;
+  string block_state = 5; // Native state string for diagnostic raycasts.
 }
 
 message EntityInfo {
@@ -160,4 +161,10 @@ message ObservationSpaceMessage {
   double velocity_y = 42;
   double velocity_z = 43;
   LidarResult lidar_result = 44;  // Lidar scan result if lidar is enabled
+  optional int32 selected_slot = 45; // Actual native hotbar selection, 0..8.
+  map<string, int32> used_items = 46; // Native cumulative item-use statistics.
+  map<string, int32> picked_up_items = 47; // Actual native inventory transfers, including partial pickups.
+  optional int64 world_seed = 48; // Diagnostic only, authoritative generator seed.
+  int64 time_of_day = 49; // Diagnostic only, separate from simulation ticks.
+  optional int64 client_time_of_day = 50; // Diagnose rendered clock synchronization.
 }

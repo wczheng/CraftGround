@@ -856,6 +856,26 @@ public final class ObservationSpace {
      */
     com.google.protobuf.ByteString
         getTranslationKeyBytes();
+
+    /**
+     * <pre>
+     * Native state string for diagnostic raycasts.
+     * </pre>
+     *
+     * <code>string block_state = 5;</code>
+     * @return The blockState.
+     */
+    java.lang.String getBlockState();
+    /**
+     * <pre>
+     * Native state string for diagnostic raycasts.
+     * </pre>
+     *
+     * <code>string block_state = 5;</code>
+     * @return The bytes for blockState.
+     */
+    com.google.protobuf.ByteString
+        getBlockStateBytes();
   }
   /**
    * Protobuf type {@code BlockInfo}
@@ -880,6 +900,7 @@ public final class ObservationSpace {
     }
     private BlockInfo() {
       translationKey_ = "";
+      blockState_ = "";
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor
@@ -967,6 +988,53 @@ public final class ObservationSpace {
       }
     }
 
+    public static final int BLOCK_STATE_FIELD_NUMBER = 5;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object blockState_ = "";
+    /**
+     * <pre>
+     * Native state string for diagnostic raycasts.
+     * </pre>
+     *
+     * <code>string block_state = 5;</code>
+     * @return The blockState.
+     */
+    @java.lang.Override
+    public java.lang.String getBlockState() {
+      java.lang.Object ref = blockState_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        blockState_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * Native state string for diagnostic raycasts.
+     * </pre>
+     *
+     * <code>string block_state = 5;</code>
+     * @return The bytes for blockState.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getBlockStateBytes() {
+      java.lang.Object ref = blockState_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        blockState_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -993,6 +1061,9 @@ public final class ObservationSpace {
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(translationKey_)) {
         com.google.protobuf.GeneratedMessage.writeString(output, 4, translationKey_);
       }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(blockState_)) {
+        com.google.protobuf.GeneratedMessage.writeString(output, 5, blockState_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1017,6 +1088,9 @@ public final class ObservationSpace {
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(translationKey_)) {
         size += com.google.protobuf.GeneratedMessage.computeStringSize(4, translationKey_);
       }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(blockState_)) {
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(5, blockState_);
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -1040,6 +1114,8 @@ public final class ObservationSpace {
           != other.getZ()) return false;
       if (!getTranslationKey()
           .equals(other.getTranslationKey())) return false;
+      if (!getBlockState()
+          .equals(other.getBlockState())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -1059,6 +1135,8 @@ public final class ObservationSpace {
       hash = (53 * hash) + getZ();
       hash = (37 * hash) + TRANSLATION_KEY_FIELD_NUMBER;
       hash = (53 * hash) + getTranslationKey().hashCode();
+      hash = (37 * hash) + BLOCK_STATE_FIELD_NUMBER;
+      hash = (53 * hash) + getBlockState().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1194,6 +1272,7 @@ public final class ObservationSpace {
         y_ = 0;
         z_ = 0;
         translationKey_ = "";
+        blockState_ = "";
         return this;
       }
 
@@ -1239,6 +1318,9 @@ public final class ObservationSpace {
         if (((from_bitField0_ & 0x00000008) != 0)) {
           result.translationKey_ = translationKey_;
         }
+        if (((from_bitField0_ & 0x00000010) != 0)) {
+          result.blockState_ = blockState_;
+        }
       }
 
       @java.lang.Override
@@ -1265,6 +1347,11 @@ public final class ObservationSpace {
         if (!other.getTranslationKey().isEmpty()) {
           translationKey_ = other.translationKey_;
           bitField0_ |= 0x00000008;
+          onChanged();
+        }
+        if (!other.getBlockState().isEmpty()) {
+          blockState_ = other.blockState_;
+          bitField0_ |= 0x00000010;
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -1313,6 +1400,11 @@ public final class ObservationSpace {
                 bitField0_ |= 0x00000008;
                 break;
               } // case 34
+              case 42: {
+                blockState_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 42
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -1494,6 +1586,98 @@ public final class ObservationSpace {
         checkByteStringIsUtf8(value);
         translationKey_ = value;
         bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object blockState_ = "";
+      /**
+       * <pre>
+       * Native state string for diagnostic raycasts.
+       * </pre>
+       *
+       * <code>string block_state = 5;</code>
+       * @return The blockState.
+       */
+      public java.lang.String getBlockState() {
+        java.lang.Object ref = blockState_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          blockState_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Native state string for diagnostic raycasts.
+       * </pre>
+       *
+       * <code>string block_state = 5;</code>
+       * @return The bytes for blockState.
+       */
+      public com.google.protobuf.ByteString
+          getBlockStateBytes() {
+        java.lang.Object ref = blockState_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          blockState_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Native state string for diagnostic raycasts.
+       * </pre>
+       *
+       * <code>string block_state = 5;</code>
+       * @param value The blockState to set.
+       * @return This builder for chaining.
+       */
+      public Builder setBlockState(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        blockState_ = value;
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Native state string for diagnostic raycasts.
+       * </pre>
+       *
+       * <code>string block_state = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearBlockState() {
+        blockState_ = getDefaultInstance().getBlockState();
+        bitField0_ = (bitField0_ & ~0x00000010);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Native state string for diagnostic raycasts.
+       * </pre>
+       *
+       * <code>string block_state = 5;</code>
+       * @param value The bytes for blockState to set.
+       * @return This builder for chaining.
+       */
+      public Builder setBlockStateBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        blockState_ = value;
+        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -13286,6 +13470,177 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
      * <code>.LidarResult lidar_result = 44;</code>
      */
     com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.LidarResultOrBuilder getLidarResultOrBuilder();
+
+    /**
+     * <pre>
+     * Actual native hotbar selection, 0..8.
+     * </pre>
+     *
+     * <code>optional int32 selected_slot = 45;</code>
+     * @return Whether the selectedSlot field is set.
+     */
+    boolean hasSelectedSlot();
+    /**
+     * <pre>
+     * Actual native hotbar selection, 0..8.
+     * </pre>
+     *
+     * <code>optional int32 selected_slot = 45;</code>
+     * @return The selectedSlot.
+     */
+    int getSelectedSlot();
+
+    /**
+     * <pre>
+     * Native cumulative item-use statistics.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; used_items = 46;</code>
+     */
+    int getUsedItemsCount();
+    /**
+     * <pre>
+     * Native cumulative item-use statistics.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; used_items = 46;</code>
+     */
+    boolean containsUsedItems(
+        java.lang.String key);
+    /**
+     * Use {@link #getUsedItemsMap()} instead.
+     */
+    @java.lang.Deprecated
+    java.util.Map<java.lang.String, java.lang.Integer>
+    getUsedItems();
+    /**
+     * <pre>
+     * Native cumulative item-use statistics.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; used_items = 46;</code>
+     */
+    java.util.Map<java.lang.String, java.lang.Integer>
+    getUsedItemsMap();
+    /**
+     * <pre>
+     * Native cumulative item-use statistics.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; used_items = 46;</code>
+     */
+    int getUsedItemsOrDefault(
+        java.lang.String key,
+        int defaultValue);
+    /**
+     * <pre>
+     * Native cumulative item-use statistics.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; used_items = 46;</code>
+     */
+    int getUsedItemsOrThrow(
+        java.lang.String key);
+
+    /**
+     * <pre>
+     * Actual native inventory transfers, including partial pickups.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+     */
+    int getPickedUpItemsCount();
+    /**
+     * <pre>
+     * Actual native inventory transfers, including partial pickups.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+     */
+    boolean containsPickedUpItems(
+        java.lang.String key);
+    /**
+     * Use {@link #getPickedUpItemsMap()} instead.
+     */
+    @java.lang.Deprecated
+    java.util.Map<java.lang.String, java.lang.Integer>
+    getPickedUpItems();
+    /**
+     * <pre>
+     * Actual native inventory transfers, including partial pickups.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+     */
+    java.util.Map<java.lang.String, java.lang.Integer>
+    getPickedUpItemsMap();
+    /**
+     * <pre>
+     * Actual native inventory transfers, including partial pickups.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+     */
+    int getPickedUpItemsOrDefault(
+        java.lang.String key,
+        int defaultValue);
+    /**
+     * <pre>
+     * Actual native inventory transfers, including partial pickups.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+     */
+    int getPickedUpItemsOrThrow(
+        java.lang.String key);
+
+    /**
+     * <pre>
+     * Diagnostic only, authoritative generator seed.
+     * </pre>
+     *
+     * <code>optional int64 world_seed = 48;</code>
+     * @return Whether the worldSeed field is set.
+     */
+    boolean hasWorldSeed();
+    /**
+     * <pre>
+     * Diagnostic only, authoritative generator seed.
+     * </pre>
+     *
+     * <code>optional int64 world_seed = 48;</code>
+     * @return The worldSeed.
+     */
+    long getWorldSeed();
+
+    /**
+     * <pre>
+     * Diagnostic only, separate from simulation ticks.
+     * </pre>
+     *
+     * <code>int64 time_of_day = 49;</code>
+     * @return The timeOfDay.
+     */
+    long getTimeOfDay();
+
+    /**
+     * <pre>
+     * Diagnose rendered clock synchronization.
+     * </pre>
+     *
+     * <code>optional int64 client_time_of_day = 50;</code>
+     * @return Whether the clientTimeOfDay field is set.
+     */
+    boolean hasClientTimeOfDay();
+    /**
+     * <pre>
+     * Diagnose rendered clock synchronization.
+     * </pre>
+     *
+     * <code>optional int64 client_time_of_day = 50;</code>
+     * @return The clientTimeOfDay.
+     */
+    long getClientTimeOfDay();
   }
   /**
    * Protobuf type {@code ObservationSpaceMessage}
@@ -13344,6 +13699,10 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
           return internalGetMiscStatistics();
         case 19:
           return internalGetSurroundingEntities();
+        case 46:
+          return internalGetUsedItems();
+        case 47:
+          return internalGetPickedUpItems();
         default:
           throw new RuntimeException(
               "Invalid map field number: " + number);
@@ -14532,6 +14891,288 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
       return lidarResult_ == null ? com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.LidarResult.getDefaultInstance() : lidarResult_;
     }
 
+    public static final int SELECTED_SLOT_FIELD_NUMBER = 45;
+    private int selectedSlot_ = 0;
+    /**
+     * <pre>
+     * Actual native hotbar selection, 0..8.
+     * </pre>
+     *
+     * <code>optional int32 selected_slot = 45;</code>
+     * @return Whether the selectedSlot field is set.
+     */
+    @java.lang.Override
+    public boolean hasSelectedSlot() {
+      return ((bitField0_ & 0x00000008) != 0);
+    }
+    /**
+     * <pre>
+     * Actual native hotbar selection, 0..8.
+     * </pre>
+     *
+     * <code>optional int32 selected_slot = 45;</code>
+     * @return The selectedSlot.
+     */
+    @java.lang.Override
+    public int getSelectedSlot() {
+      return selectedSlot_;
+    }
+
+    public static final int USED_ITEMS_FIELD_NUMBER = 46;
+    private static final class UsedItemsDefaultEntryHolder {
+      static final com.google.protobuf.MapEntry<
+          java.lang.String, java.lang.Integer> defaultEntry =
+              com.google.protobuf.MapEntry
+              .<java.lang.String, java.lang.Integer>newDefaultInstance(
+                  com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.internal_static_ObservationSpaceMessage_UsedItemsEntry_descriptor,
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "",
+                  com.google.protobuf.WireFormat.FieldType.INT32,
+                  0);
+    }
+    @SuppressWarnings("serial")
+    private com.google.protobuf.MapField<
+        java.lang.String, java.lang.Integer> usedItems_;
+    private com.google.protobuf.MapField<java.lang.String, java.lang.Integer>
+    internalGetUsedItems() {
+      if (usedItems_ == null) {
+        return com.google.protobuf.MapField.emptyMapField(
+            UsedItemsDefaultEntryHolder.defaultEntry);
+      }
+      return usedItems_;
+    }
+    public int getUsedItemsCount() {
+      return internalGetUsedItems().getMap().size();
+    }
+    /**
+     * <pre>
+     * Native cumulative item-use statistics.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; used_items = 46;</code>
+     */
+    @java.lang.Override
+    public boolean containsUsedItems(
+        java.lang.String key) {
+      if (key == null) { throw new NullPointerException("map key"); }
+      return internalGetUsedItems().getMap().containsKey(key);
+    }
+    /**
+     * Use {@link #getUsedItemsMap()} instead.
+     */
+    @java.lang.Override
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, java.lang.Integer> getUsedItems() {
+      return getUsedItemsMap();
+    }
+    /**
+     * <pre>
+     * Native cumulative item-use statistics.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; used_items = 46;</code>
+     */
+    @java.lang.Override
+    public java.util.Map<java.lang.String, java.lang.Integer> getUsedItemsMap() {
+      return internalGetUsedItems().getMap();
+    }
+    /**
+     * <pre>
+     * Native cumulative item-use statistics.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; used_items = 46;</code>
+     */
+    @java.lang.Override
+    public int getUsedItemsOrDefault(
+        java.lang.String key,
+        int defaultValue) {
+      if (key == null) { throw new NullPointerException("map key"); }
+      java.util.Map<java.lang.String, java.lang.Integer> map =
+          internalGetUsedItems().getMap();
+      return map.containsKey(key) ? map.get(key) : defaultValue;
+    }
+    /**
+     * <pre>
+     * Native cumulative item-use statistics.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; used_items = 46;</code>
+     */
+    @java.lang.Override
+    public int getUsedItemsOrThrow(
+        java.lang.String key) {
+      if (key == null) { throw new NullPointerException("map key"); }
+      java.util.Map<java.lang.String, java.lang.Integer> map =
+          internalGetUsedItems().getMap();
+      if (!map.containsKey(key)) {
+        throw new java.lang.IllegalArgumentException();
+      }
+      return map.get(key);
+    }
+
+    public static final int PICKED_UP_ITEMS_FIELD_NUMBER = 47;
+    private static final class PickedUpItemsDefaultEntryHolder {
+      static final com.google.protobuf.MapEntry<
+          java.lang.String, java.lang.Integer> defaultEntry =
+              com.google.protobuf.MapEntry
+              .<java.lang.String, java.lang.Integer>newDefaultInstance(
+                  com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.internal_static_ObservationSpaceMessage_PickedUpItemsEntry_descriptor,
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "",
+                  com.google.protobuf.WireFormat.FieldType.INT32,
+                  0);
+    }
+    @SuppressWarnings("serial")
+    private com.google.protobuf.MapField<
+        java.lang.String, java.lang.Integer> pickedUpItems_;
+    private com.google.protobuf.MapField<java.lang.String, java.lang.Integer>
+    internalGetPickedUpItems() {
+      if (pickedUpItems_ == null) {
+        return com.google.protobuf.MapField.emptyMapField(
+            PickedUpItemsDefaultEntryHolder.defaultEntry);
+      }
+      return pickedUpItems_;
+    }
+    public int getPickedUpItemsCount() {
+      return internalGetPickedUpItems().getMap().size();
+    }
+    /**
+     * <pre>
+     * Actual native inventory transfers, including partial pickups.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+     */
+    @java.lang.Override
+    public boolean containsPickedUpItems(
+        java.lang.String key) {
+      if (key == null) { throw new NullPointerException("map key"); }
+      return internalGetPickedUpItems().getMap().containsKey(key);
+    }
+    /**
+     * Use {@link #getPickedUpItemsMap()} instead.
+     */
+    @java.lang.Override
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, java.lang.Integer> getPickedUpItems() {
+      return getPickedUpItemsMap();
+    }
+    /**
+     * <pre>
+     * Actual native inventory transfers, including partial pickups.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+     */
+    @java.lang.Override
+    public java.util.Map<java.lang.String, java.lang.Integer> getPickedUpItemsMap() {
+      return internalGetPickedUpItems().getMap();
+    }
+    /**
+     * <pre>
+     * Actual native inventory transfers, including partial pickups.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+     */
+    @java.lang.Override
+    public int getPickedUpItemsOrDefault(
+        java.lang.String key,
+        int defaultValue) {
+      if (key == null) { throw new NullPointerException("map key"); }
+      java.util.Map<java.lang.String, java.lang.Integer> map =
+          internalGetPickedUpItems().getMap();
+      return map.containsKey(key) ? map.get(key) : defaultValue;
+    }
+    /**
+     * <pre>
+     * Actual native inventory transfers, including partial pickups.
+     * </pre>
+     *
+     * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+     */
+    @java.lang.Override
+    public int getPickedUpItemsOrThrow(
+        java.lang.String key) {
+      if (key == null) { throw new NullPointerException("map key"); }
+      java.util.Map<java.lang.String, java.lang.Integer> map =
+          internalGetPickedUpItems().getMap();
+      if (!map.containsKey(key)) {
+        throw new java.lang.IllegalArgumentException();
+      }
+      return map.get(key);
+    }
+
+    public static final int WORLD_SEED_FIELD_NUMBER = 48;
+    private long worldSeed_ = 0L;
+    /**
+     * <pre>
+     * Diagnostic only, authoritative generator seed.
+     * </pre>
+     *
+     * <code>optional int64 world_seed = 48;</code>
+     * @return Whether the worldSeed field is set.
+     */
+    @java.lang.Override
+    public boolean hasWorldSeed() {
+      return ((bitField0_ & 0x00000010) != 0);
+    }
+    /**
+     * <pre>
+     * Diagnostic only, authoritative generator seed.
+     * </pre>
+     *
+     * <code>optional int64 world_seed = 48;</code>
+     * @return The worldSeed.
+     */
+    @java.lang.Override
+    public long getWorldSeed() {
+      return worldSeed_;
+    }
+
+    public static final int TIME_OF_DAY_FIELD_NUMBER = 49;
+    private long timeOfDay_ = 0L;
+    /**
+     * <pre>
+     * Diagnostic only, separate from simulation ticks.
+     * </pre>
+     *
+     * <code>int64 time_of_day = 49;</code>
+     * @return The timeOfDay.
+     */
+    @java.lang.Override
+    public long getTimeOfDay() {
+      return timeOfDay_;
+    }
+
+    public static final int CLIENT_TIME_OF_DAY_FIELD_NUMBER = 50;
+    private long clientTimeOfDay_ = 0L;
+    /**
+     * <pre>
+     * Diagnose rendered clock synchronization.
+     * </pre>
+     *
+     * <code>optional int64 client_time_of_day = 50;</code>
+     * @return Whether the clientTimeOfDay field is set.
+     */
+    @java.lang.Override
+    public boolean hasClientTimeOfDay() {
+      return ((bitField0_ & 0x00000020) != 0);
+    }
+    /**
+     * <pre>
+     * Diagnose rendered clock synchronization.
+     * </pre>
+     *
+     * <code>optional int64 client_time_of_day = 50;</code>
+     * @return The clientTimeOfDay.
+     */
+    @java.lang.Override
+    public long getClientTimeOfDay() {
+      return clientTimeOfDay_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -14694,6 +15335,30 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
       }
       if (((bitField0_ & 0x00000004) != 0)) {
         output.writeMessage(44, getLidarResult());
+      }
+      if (((bitField0_ & 0x00000008) != 0)) {
+        output.writeInt32(45, selectedSlot_);
+      }
+      com.google.protobuf.GeneratedMessage
+        .serializeStringMapTo(
+          output,
+          internalGetUsedItems(),
+          UsedItemsDefaultEntryHolder.defaultEntry,
+          46);
+      com.google.protobuf.GeneratedMessage
+        .serializeStringMapTo(
+          output,
+          internalGetPickedUpItems(),
+          PickedUpItemsDefaultEntryHolder.defaultEntry,
+          47);
+      if (((bitField0_ & 0x00000010) != 0)) {
+        output.writeInt64(48, worldSeed_);
+      }
+      if (timeOfDay_ != 0L) {
+        output.writeInt64(49, timeOfDay_);
+      }
+      if (((bitField0_ & 0x00000020) != 0)) {
+        output.writeInt64(50, clientTimeOfDay_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -14910,6 +15575,42 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(44, getLidarResult());
       }
+      if (((bitField0_ & 0x00000008) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(45, selectedSlot_);
+      }
+      for (java.util.Map.Entry<java.lang.String, java.lang.Integer> entry
+           : internalGetUsedItems().getMap().entrySet()) {
+        com.google.protobuf.MapEntry<java.lang.String, java.lang.Integer>
+        usedItems__ = UsedItemsDefaultEntryHolder.defaultEntry.newBuilderForType()
+            .setKey(entry.getKey())
+            .setValue(entry.getValue())
+            .build();
+        size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(46, usedItems__);
+      }
+      for (java.util.Map.Entry<java.lang.String, java.lang.Integer> entry
+           : internalGetPickedUpItems().getMap().entrySet()) {
+        com.google.protobuf.MapEntry<java.lang.String, java.lang.Integer>
+        pickedUpItems__ = PickedUpItemsDefaultEntryHolder.defaultEntry.newBuilderForType()
+            .setKey(entry.getKey())
+            .setValue(entry.getValue())
+            .build();
+        size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(47, pickedUpItems__);
+      }
+      if (((bitField0_ & 0x00000010) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(48, worldSeed_);
+      }
+      if (timeOfDay_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(49, timeOfDay_);
+      }
+      if (((bitField0_ & 0x00000020) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(50, clientTimeOfDay_);
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -15032,6 +15733,27 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
       if (hasLidarResult()) {
         if (!getLidarResult()
             .equals(other.getLidarResult())) return false;
+      }
+      if (hasSelectedSlot() != other.hasSelectedSlot()) return false;
+      if (hasSelectedSlot()) {
+        if (getSelectedSlot()
+            != other.getSelectedSlot()) return false;
+      }
+      if (!internalGetUsedItems().equals(
+          other.internalGetUsedItems())) return false;
+      if (!internalGetPickedUpItems().equals(
+          other.internalGetPickedUpItems())) return false;
+      if (hasWorldSeed() != other.hasWorldSeed()) return false;
+      if (hasWorldSeed()) {
+        if (getWorldSeed()
+            != other.getWorldSeed()) return false;
+      }
+      if (getTimeOfDay()
+          != other.getTimeOfDay()) return false;
+      if (hasClientTimeOfDay() != other.hasClientTimeOfDay()) return false;
+      if (hasClientTimeOfDay()) {
+        if (getClientTimeOfDay()
+            != other.getClientTimeOfDay()) return false;
       }
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
@@ -15189,6 +15911,31 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
         hash = (37 * hash) + LIDAR_RESULT_FIELD_NUMBER;
         hash = (53 * hash) + getLidarResult().hashCode();
       }
+      if (hasSelectedSlot()) {
+        hash = (37 * hash) + SELECTED_SLOT_FIELD_NUMBER;
+        hash = (53 * hash) + getSelectedSlot();
+      }
+      if (!internalGetUsedItems().getMap().isEmpty()) {
+        hash = (37 * hash) + USED_ITEMS_FIELD_NUMBER;
+        hash = (53 * hash) + internalGetUsedItems().hashCode();
+      }
+      if (!internalGetPickedUpItems().getMap().isEmpty()) {
+        hash = (37 * hash) + PICKED_UP_ITEMS_FIELD_NUMBER;
+        hash = (53 * hash) + internalGetPickedUpItems().hashCode();
+      }
+      if (hasWorldSeed()) {
+        hash = (37 * hash) + WORLD_SEED_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getWorldSeed());
+      }
+      hash = (37 * hash) + TIME_OF_DAY_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getTimeOfDay());
+      if (hasClientTimeOfDay()) {
+        hash = (37 * hash) + CLIENT_TIME_OF_DAY_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getClientTimeOfDay());
+      }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -15310,6 +16057,10 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
             return internalGetMiscStatistics();
           case 19:
             return internalGetSurroundingEntities();
+          case 46:
+            return internalGetUsedItems();
+          case 47:
+            return internalGetPickedUpItems();
           default:
             throw new RuntimeException(
                 "Invalid map field number: " + number);
@@ -15327,6 +16078,10 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
             return internalGetMutableMiscStatistics();
           case 19:
             return internalGetMutableSurroundingEntities();
+          case 46:
+            return internalGetMutableUsedItems();
+          case 47:
+            return internalGetMutablePickedUpItems();
           default:
             throw new RuntimeException(
                 "Invalid map field number: " + number);
@@ -15489,6 +16244,12 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
           lidarResultBuilder_.dispose();
           lidarResultBuilder_ = null;
         }
+        selectedSlot_ = 0;
+        internalGetMutableUsedItems().clear();
+        internalGetMutablePickedUpItems().clear();
+        worldSeed_ = 0L;
+        timeOfDay_ = 0L;
+        clientTimeOfDay_ = 0L;
         return this;
       }
 
@@ -15738,6 +16499,29 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
               ? lidarResult_
               : lidarResultBuilder_.build();
           to_bitField0_ |= 0x00000004;
+        }
+        if (((from_bitField1_ & 0x00001000) != 0)) {
+          result.selectedSlot_ = selectedSlot_;
+          to_bitField0_ |= 0x00000008;
+        }
+        if (((from_bitField1_ & 0x00002000) != 0)) {
+          result.usedItems_ = internalGetUsedItems();
+          result.usedItems_.makeImmutable();
+        }
+        if (((from_bitField1_ & 0x00004000) != 0)) {
+          result.pickedUpItems_ = internalGetPickedUpItems();
+          result.pickedUpItems_.makeImmutable();
+        }
+        if (((from_bitField1_ & 0x00008000) != 0)) {
+          result.worldSeed_ = worldSeed_;
+          to_bitField0_ |= 0x00000010;
+        }
+        if (((from_bitField1_ & 0x00010000) != 0)) {
+          result.timeOfDay_ = timeOfDay_;
+        }
+        if (((from_bitField1_ & 0x00020000) != 0)) {
+          result.clientTimeOfDay_ = clientTimeOfDay_;
+          to_bitField0_ |= 0x00000020;
         }
         result.bitField0_ |= to_bitField0_;
       }
@@ -16126,6 +16910,24 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
         if (other.hasLidarResult()) {
           mergeLidarResult(other.getLidarResult());
         }
+        if (other.hasSelectedSlot()) {
+          setSelectedSlot(other.getSelectedSlot());
+        }
+        internalGetMutableUsedItems().mergeFrom(
+            other.internalGetUsedItems());
+        bitField1_ |= 0x00002000;
+        internalGetMutablePickedUpItems().mergeFrom(
+            other.internalGetPickedUpItems());
+        bitField1_ |= 0x00004000;
+        if (other.hasWorldSeed()) {
+          setWorldSeed(other.getWorldSeed());
+        }
+        if (other.getTimeOfDay() != 0L) {
+          setTimeOfDay(other.getTimeOfDay());
+        }
+        if (other.hasClientTimeOfDay()) {
+          setClientTimeOfDay(other.getClientTimeOfDay());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
@@ -16486,6 +17288,44 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
                 bitField1_ |= 0x00000800;
                 break;
               } // case 354
+              case 360: {
+                selectedSlot_ = input.readInt32();
+                bitField1_ |= 0x00001000;
+                break;
+              } // case 360
+              case 370: {
+                com.google.protobuf.MapEntry<java.lang.String, java.lang.Integer>
+                usedItems__ = input.readMessage(
+                    UsedItemsDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
+                internalGetMutableUsedItems().getMutableMap().put(
+                    usedItems__.getKey(), usedItems__.getValue());
+                bitField1_ |= 0x00002000;
+                break;
+              } // case 370
+              case 378: {
+                com.google.protobuf.MapEntry<java.lang.String, java.lang.Integer>
+                pickedUpItems__ = input.readMessage(
+                    PickedUpItemsDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
+                internalGetMutablePickedUpItems().getMutableMap().put(
+                    pickedUpItems__.getKey(), pickedUpItems__.getValue());
+                bitField1_ |= 0x00004000;
+                break;
+              } // case 378
+              case 384: {
+                worldSeed_ = input.readInt64();
+                bitField1_ |= 0x00008000;
+                break;
+              } // case 384
+              case 392: {
+                timeOfDay_ = input.readInt64();
+                bitField1_ |= 0x00010000;
+                break;
+              } // case 392
+              case 400: {
+                clientTimeOfDay_ = input.readInt64();
+                bitField1_ |= 0x00020000;
+                break;
+              } // case 400
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -20867,6 +21707,524 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
         return lidarResultBuilder_;
       }
 
+      private int selectedSlot_ ;
+      /**
+       * <pre>
+       * Actual native hotbar selection, 0..8.
+       * </pre>
+       *
+       * <code>optional int32 selected_slot = 45;</code>
+       * @return Whether the selectedSlot field is set.
+       */
+      @java.lang.Override
+      public boolean hasSelectedSlot() {
+        return ((bitField1_ & 0x00001000) != 0);
+      }
+      /**
+       * <pre>
+       * Actual native hotbar selection, 0..8.
+       * </pre>
+       *
+       * <code>optional int32 selected_slot = 45;</code>
+       * @return The selectedSlot.
+       */
+      @java.lang.Override
+      public int getSelectedSlot() {
+        return selectedSlot_;
+      }
+      /**
+       * <pre>
+       * Actual native hotbar selection, 0..8.
+       * </pre>
+       *
+       * <code>optional int32 selected_slot = 45;</code>
+       * @param value The selectedSlot to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSelectedSlot(int value) {
+
+        selectedSlot_ = value;
+        bitField1_ |= 0x00001000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Actual native hotbar selection, 0..8.
+       * </pre>
+       *
+       * <code>optional int32 selected_slot = 45;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSelectedSlot() {
+        bitField1_ = (bitField1_ & ~0x00001000);
+        selectedSlot_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.MapField<
+          java.lang.String, java.lang.Integer> usedItems_;
+      private com.google.protobuf.MapField<java.lang.String, java.lang.Integer>
+          internalGetUsedItems() {
+        if (usedItems_ == null) {
+          return com.google.protobuf.MapField.emptyMapField(
+              UsedItemsDefaultEntryHolder.defaultEntry);
+        }
+        return usedItems_;
+      }
+      private com.google.protobuf.MapField<java.lang.String, java.lang.Integer>
+          internalGetMutableUsedItems() {
+        if (usedItems_ == null) {
+          usedItems_ = com.google.protobuf.MapField.newMapField(
+              UsedItemsDefaultEntryHolder.defaultEntry);
+        }
+        if (!usedItems_.isMutable()) {
+          usedItems_ = usedItems_.copy();
+        }
+        bitField1_ |= 0x00002000;
+        onChanged();
+        return usedItems_;
+      }
+      public int getUsedItemsCount() {
+        return internalGetUsedItems().getMap().size();
+      }
+      /**
+       * <pre>
+       * Native cumulative item-use statistics.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; used_items = 46;</code>
+       */
+      @java.lang.Override
+      public boolean containsUsedItems(
+          java.lang.String key) {
+        if (key == null) { throw new NullPointerException("map key"); }
+        return internalGetUsedItems().getMap().containsKey(key);
+      }
+      /**
+       * Use {@link #getUsedItemsMap()} instead.
+       */
+      @java.lang.Override
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.Integer> getUsedItems() {
+        return getUsedItemsMap();
+      }
+      /**
+       * <pre>
+       * Native cumulative item-use statistics.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; used_items = 46;</code>
+       */
+      @java.lang.Override
+      public java.util.Map<java.lang.String, java.lang.Integer> getUsedItemsMap() {
+        return internalGetUsedItems().getMap();
+      }
+      /**
+       * <pre>
+       * Native cumulative item-use statistics.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; used_items = 46;</code>
+       */
+      @java.lang.Override
+      public int getUsedItemsOrDefault(
+          java.lang.String key,
+          int defaultValue) {
+        if (key == null) { throw new NullPointerException("map key"); }
+        java.util.Map<java.lang.String, java.lang.Integer> map =
+            internalGetUsedItems().getMap();
+        return map.containsKey(key) ? map.get(key) : defaultValue;
+      }
+      /**
+       * <pre>
+       * Native cumulative item-use statistics.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; used_items = 46;</code>
+       */
+      @java.lang.Override
+      public int getUsedItemsOrThrow(
+          java.lang.String key) {
+        if (key == null) { throw new NullPointerException("map key"); }
+        java.util.Map<java.lang.String, java.lang.Integer> map =
+            internalGetUsedItems().getMap();
+        if (!map.containsKey(key)) {
+          throw new java.lang.IllegalArgumentException();
+        }
+        return map.get(key);
+      }
+      public Builder clearUsedItems() {
+        bitField1_ = (bitField1_ & ~0x00002000);
+        internalGetMutableUsedItems().getMutableMap()
+            .clear();
+        return this;
+      }
+      /**
+       * <pre>
+       * Native cumulative item-use statistics.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; used_items = 46;</code>
+       */
+      public Builder removeUsedItems(
+          java.lang.String key) {
+        if (key == null) { throw new NullPointerException("map key"); }
+        internalGetMutableUsedItems().getMutableMap()
+            .remove(key);
+        return this;
+      }
+      /**
+       * Use alternate mutation accessors instead.
+       */
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.Integer>
+          getMutableUsedItems() {
+        bitField1_ |= 0x00002000;
+        return internalGetMutableUsedItems().getMutableMap();
+      }
+      /**
+       * <pre>
+       * Native cumulative item-use statistics.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; used_items = 46;</code>
+       */
+      public Builder putUsedItems(
+          java.lang.String key,
+          int value) {
+        if (key == null) { throw new NullPointerException("map key"); }
+
+        internalGetMutableUsedItems().getMutableMap()
+            .put(key, value);
+        bitField1_ |= 0x00002000;
+        return this;
+      }
+      /**
+       * <pre>
+       * Native cumulative item-use statistics.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; used_items = 46;</code>
+       */
+      public Builder putAllUsedItems(
+          java.util.Map<java.lang.String, java.lang.Integer> values) {
+        internalGetMutableUsedItems().getMutableMap()
+            .putAll(values);
+        bitField1_ |= 0x00002000;
+        return this;
+      }
+
+      private com.google.protobuf.MapField<
+          java.lang.String, java.lang.Integer> pickedUpItems_;
+      private com.google.protobuf.MapField<java.lang.String, java.lang.Integer>
+          internalGetPickedUpItems() {
+        if (pickedUpItems_ == null) {
+          return com.google.protobuf.MapField.emptyMapField(
+              PickedUpItemsDefaultEntryHolder.defaultEntry);
+        }
+        return pickedUpItems_;
+      }
+      private com.google.protobuf.MapField<java.lang.String, java.lang.Integer>
+          internalGetMutablePickedUpItems() {
+        if (pickedUpItems_ == null) {
+          pickedUpItems_ = com.google.protobuf.MapField.newMapField(
+              PickedUpItemsDefaultEntryHolder.defaultEntry);
+        }
+        if (!pickedUpItems_.isMutable()) {
+          pickedUpItems_ = pickedUpItems_.copy();
+        }
+        bitField1_ |= 0x00004000;
+        onChanged();
+        return pickedUpItems_;
+      }
+      public int getPickedUpItemsCount() {
+        return internalGetPickedUpItems().getMap().size();
+      }
+      /**
+       * <pre>
+       * Actual native inventory transfers, including partial pickups.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+       */
+      @java.lang.Override
+      public boolean containsPickedUpItems(
+          java.lang.String key) {
+        if (key == null) { throw new NullPointerException("map key"); }
+        return internalGetPickedUpItems().getMap().containsKey(key);
+      }
+      /**
+       * Use {@link #getPickedUpItemsMap()} instead.
+       */
+      @java.lang.Override
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.Integer> getPickedUpItems() {
+        return getPickedUpItemsMap();
+      }
+      /**
+       * <pre>
+       * Actual native inventory transfers, including partial pickups.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+       */
+      @java.lang.Override
+      public java.util.Map<java.lang.String, java.lang.Integer> getPickedUpItemsMap() {
+        return internalGetPickedUpItems().getMap();
+      }
+      /**
+       * <pre>
+       * Actual native inventory transfers, including partial pickups.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+       */
+      @java.lang.Override
+      public int getPickedUpItemsOrDefault(
+          java.lang.String key,
+          int defaultValue) {
+        if (key == null) { throw new NullPointerException("map key"); }
+        java.util.Map<java.lang.String, java.lang.Integer> map =
+            internalGetPickedUpItems().getMap();
+        return map.containsKey(key) ? map.get(key) : defaultValue;
+      }
+      /**
+       * <pre>
+       * Actual native inventory transfers, including partial pickups.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+       */
+      @java.lang.Override
+      public int getPickedUpItemsOrThrow(
+          java.lang.String key) {
+        if (key == null) { throw new NullPointerException("map key"); }
+        java.util.Map<java.lang.String, java.lang.Integer> map =
+            internalGetPickedUpItems().getMap();
+        if (!map.containsKey(key)) {
+          throw new java.lang.IllegalArgumentException();
+        }
+        return map.get(key);
+      }
+      public Builder clearPickedUpItems() {
+        bitField1_ = (bitField1_ & ~0x00004000);
+        internalGetMutablePickedUpItems().getMutableMap()
+            .clear();
+        return this;
+      }
+      /**
+       * <pre>
+       * Actual native inventory transfers, including partial pickups.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+       */
+      public Builder removePickedUpItems(
+          java.lang.String key) {
+        if (key == null) { throw new NullPointerException("map key"); }
+        internalGetMutablePickedUpItems().getMutableMap()
+            .remove(key);
+        return this;
+      }
+      /**
+       * Use alternate mutation accessors instead.
+       */
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.Integer>
+          getMutablePickedUpItems() {
+        bitField1_ |= 0x00004000;
+        return internalGetMutablePickedUpItems().getMutableMap();
+      }
+      /**
+       * <pre>
+       * Actual native inventory transfers, including partial pickups.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+       */
+      public Builder putPickedUpItems(
+          java.lang.String key,
+          int value) {
+        if (key == null) { throw new NullPointerException("map key"); }
+
+        internalGetMutablePickedUpItems().getMutableMap()
+            .put(key, value);
+        bitField1_ |= 0x00004000;
+        return this;
+      }
+      /**
+       * <pre>
+       * Actual native inventory transfers, including partial pickups.
+       * </pre>
+       *
+       * <code>map&lt;string, int32&gt; picked_up_items = 47;</code>
+       */
+      public Builder putAllPickedUpItems(
+          java.util.Map<java.lang.String, java.lang.Integer> values) {
+        internalGetMutablePickedUpItems().getMutableMap()
+            .putAll(values);
+        bitField1_ |= 0x00004000;
+        return this;
+      }
+
+      private long worldSeed_ ;
+      /**
+       * <pre>
+       * Diagnostic only, authoritative generator seed.
+       * </pre>
+       *
+       * <code>optional int64 world_seed = 48;</code>
+       * @return Whether the worldSeed field is set.
+       */
+      @java.lang.Override
+      public boolean hasWorldSeed() {
+        return ((bitField1_ & 0x00008000) != 0);
+      }
+      /**
+       * <pre>
+       * Diagnostic only, authoritative generator seed.
+       * </pre>
+       *
+       * <code>optional int64 world_seed = 48;</code>
+       * @return The worldSeed.
+       */
+      @java.lang.Override
+      public long getWorldSeed() {
+        return worldSeed_;
+      }
+      /**
+       * <pre>
+       * Diagnostic only, authoritative generator seed.
+       * </pre>
+       *
+       * <code>optional int64 world_seed = 48;</code>
+       * @param value The worldSeed to set.
+       * @return This builder for chaining.
+       */
+      public Builder setWorldSeed(long value) {
+
+        worldSeed_ = value;
+        bitField1_ |= 0x00008000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Diagnostic only, authoritative generator seed.
+       * </pre>
+       *
+       * <code>optional int64 world_seed = 48;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearWorldSeed() {
+        bitField1_ = (bitField1_ & ~0x00008000);
+        worldSeed_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long timeOfDay_ ;
+      /**
+       * <pre>
+       * Diagnostic only, separate from simulation ticks.
+       * </pre>
+       *
+       * <code>int64 time_of_day = 49;</code>
+       * @return The timeOfDay.
+       */
+      @java.lang.Override
+      public long getTimeOfDay() {
+        return timeOfDay_;
+      }
+      /**
+       * <pre>
+       * Diagnostic only, separate from simulation ticks.
+       * </pre>
+       *
+       * <code>int64 time_of_day = 49;</code>
+       * @param value The timeOfDay to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTimeOfDay(long value) {
+
+        timeOfDay_ = value;
+        bitField1_ |= 0x00010000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Diagnostic only, separate from simulation ticks.
+       * </pre>
+       *
+       * <code>int64 time_of_day = 49;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTimeOfDay() {
+        bitField1_ = (bitField1_ & ~0x00010000);
+        timeOfDay_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long clientTimeOfDay_ ;
+      /**
+       * <pre>
+       * Diagnose rendered clock synchronization.
+       * </pre>
+       *
+       * <code>optional int64 client_time_of_day = 50;</code>
+       * @return Whether the clientTimeOfDay field is set.
+       */
+      @java.lang.Override
+      public boolean hasClientTimeOfDay() {
+        return ((bitField1_ & 0x00020000) != 0);
+      }
+      /**
+       * <pre>
+       * Diagnose rendered clock synchronization.
+       * </pre>
+       *
+       * <code>optional int64 client_time_of_day = 50;</code>
+       * @return The clientTimeOfDay.
+       */
+      @java.lang.Override
+      public long getClientTimeOfDay() {
+        return clientTimeOfDay_;
+      }
+      /**
+       * <pre>
+       * Diagnose rendered clock synchronization.
+       * </pre>
+       *
+       * <code>optional int64 client_time_of_day = 50;</code>
+       * @param value The clientTimeOfDay to set.
+       * @return This builder for chaining.
+       */
+      public Builder setClientTimeOfDay(long value) {
+
+        clientTimeOfDay_ = value;
+        bitField1_ |= 0x00020000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Diagnose rendered clock synchronization.
+       * </pre>
+       *
+       * <code>optional int64 client_time_of_day = 50;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearClientTimeOfDay() {
+        bitField1_ = (bitField1_ & ~0x00020000);
+        clientTimeOfDay_ = 0L;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:ObservationSpaceMessage)
     }
 
@@ -21018,6 +22376,16 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
   private static final 
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_ObservationSpaceMessage_SurroundingEntitiesEntry_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_ObservationSpaceMessage_UsedItemsEntry_descriptor;
+  private static final
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_ObservationSpaceMessage_UsedItemsEntry_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_ObservationSpaceMessage_PickedUpItemsEntry_descriptor;
+  private static final
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_ObservationSpaceMessage_PickedUpItemsEntry_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -21030,81 +22398,92 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
       "\n\035proto/observation_space.proto\"o\n\tItemS" +
       "tack\022\016\n\006raw_id\030\001 \001(\005\022\027\n\017translation_key\030" +
       "\002 \001(\t\022\r\n\005count\030\003 \001(\005\022\022\n\ndurability\030\004 \001(\005" +
-      "\022\026\n\016max_durability\030\005 \001(\005\"E\n\tBlockInfo\022\t\n" +
+      "\022\026\n\016max_durability\030\005 \001(\005\"Z\n\tBlockInfo\022\t\n" +
       "\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\t\n\001z\030\003 \001(\005\022\027\n\017transl" +
-      "ation_key\030\004 \001(\t\"\230\001\n\nEntityInfo\022\023\n\013unique" +
-      "_name\030\001 \001(\t\022\027\n\017translation_key\030\002 \001(\t\022\t\n\001" +
-      "x\030\003 \001(\001\022\t\n\001y\030\004 \001(\001\022\t\n\001z\030\005 \001(\001\022\013\n\003yaw\030\006 \001" +
-      "(\001\022\r\n\005pitch\030\007 \001(\001\022\016\n\006health\030\010 \001(\001\022\017\n\007in_" +
-      "love\030\t \001(\010\"\231\001\n\tHitResult\022\035\n\004type\030\001 \001(\0162\017" +
-      ".HitResult.Type\022 \n\014target_block\030\002 \001(\0132\n." +
-      "BlockInfo\022\"\n\rtarget_entity\030\003 \001(\0132\013.Entit" +
-      "yInfo\"\'\n\004Type\022\010\n\004MISS\020\000\022\t\n\005BLOCK\020\001\022\n\n\006EN" +
-      "TITY\020\002\"L\n\014StatusEffect\022\027\n\017translation_ke" +
-      "y\030\001 \001(\t\022\020\n\010duration\030\002 \001(\005\022\021\n\tamplifier\030\003" +
-      " \001(\005\"Q\n\nSoundEntry\022\025\n\rtranslate_key\030\001 \001(" +
-      "\t\022\013\n\003age\030\002 \001(\003\022\t\n\001x\030\003 \001(\001\022\t\n\001y\030\004 \001(\001\022\t\n\001" +
-      "z\030\005 \001(\001\"7\n\026EntitiesWithinDistance\022\035\n\010ent" +
-      "ities\030\001 \003(\0132\013.EntityInfo\"I\n\017ChatMessageI" +
-      "nfo\022\022\n\nadded_time\030\001 \001(\003\022\017\n\007message\030\002 \001(\t" +
-      "\022\021\n\tindicator\030\003 \001(\t\"U\n\tBiomeInfo\022\022\n\nbiom" +
-      "e_name\030\001 \001(\t\022\020\n\010center_x\030\002 \001(\005\022\020\n\010center" +
-      "_y\030\003 \001(\005\022\020\n\010center_z\030\004 \001(\005\"B\n\013NearbyBiom" +
-      "e\022\022\n\nbiome_name\030\001 \001(\t\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 " +
-      "\001(\005\022\t\n\001z\030\004 \001(\005\"F\n\nHeightInfo\022\t\n\001x\030\001 \001(\005\022" +
-      "\t\n\001z\030\002 \001(\005\022\016\n\006height\030\003 \001(\005\022\022\n\nblock_name" +
-      "\030\004 \001(\t\"I\n\022BlockCollisionInfo\022\t\n\001x\030\001 \001(\005\022" +
-      "\t\n\001y\030\002 \001(\005\022\t\n\001z\030\003 \001(\005\022\022\n\nblock_name\030\004 \001(" +
-      "\t\"K\n\023EntityCollisionInfo\022\t\n\001x\030\001 \001(\002\022\t\n\001y" +
-      "\030\002 \001(\002\022\t\n\001z\030\003 \001(\002\022\023\n\013entity_name\030\004 \001(\t\"\211" +
-      "\001\n\010LidarRay\022\020\n\010distance\030\001 \001(\002\022\020\n\010hit_typ" +
-      "e\030\002 \001(\005\022\022\n\nblock_name\030\003 \001(\t\022\023\n\013entity_na" +
-      "me\030\004 \001(\t\022\030\n\020angle_horizontal\030\005 \001(\002\022\026\n\016an" +
-      "gle_vertical\030\006 \001(\002\"l\n\013LidarResult\022\027\n\004ray" +
-      "s\030\001 \003(\0132\t.LidarRay\022\027\n\017horizontal_rays\030\002 " +
-      "\001(\005\022\025\n\rvertical_rays\030\003 \001(\005\022\024\n\014max_distan" +
-      "ce\030\004 \001(\002\"\306\014\n\027ObservationSpaceMessage\022\r\n\005" +
-      "image\030\001 \001(\014\022\t\n\001x\030\002 \001(\001\022\t\n\001y\030\003 \001(\001\022\t\n\001z\030\004" +
-      " \001(\001\022\013\n\003yaw\030\005 \001(\001\022\r\n\005pitch\030\006 \001(\001\022\016\n\006heal" +
-      "th\030\007 \001(\001\022\022\n\nfood_level\030\010 \001(\001\022\030\n\020saturati" +
-      "on_level\030\t \001(\001\022\017\n\007is_dead\030\n \001(\010\022\035\n\tinven" +
-      "tory\030\013 \003(\0132\n.ItemStack\022\"\n\016raycast_result" +
-      "\030\014 \001(\0132\n.HitResult\022$\n\017sound_subtitles\030\r " +
-      "\003(\0132\013.SoundEntry\022%\n\016status_effects\030\016 \003(\013" +
-      "2\r.StatusEffect\022I\n\021killed_statistics\030\017 \003" +
-      "(\0132..ObservationSpaceMessage.KilledStati" +
-      "sticsEntry\022G\n\020mined_statistics\030\020 \003(\0132-.O" +
-      "bservationSpaceMessage.MinedStatisticsEn" +
-      "try\022E\n\017misc_statistics\030\021 \003(\0132,.Observati" +
-      "onSpaceMessage.MiscStatisticsEntry\022%\n\020vi" +
-      "sible_entities\030\022 \003(\0132\013.EntityInfo\022O\n\024sur" +
-      "rounding_entities\030\023 \003(\01321.ObservationSpa" +
-      "ceMessage.SurroundingEntitiesEntry\022\025\n\rbo" +
-      "bber_thrown\030\024 \001(\010\022\022\n\nexperience\030\025 \001(\005\022\022\n" +
-      "\nworld_time\030\026 \001(\003\022\032\n\022last_death_message\030" +
-      "\027 \001(\t\022\017\n\007image_2\030\030 \001(\014\022&\n\022surrounding_bl" +
-      "ocks\030\031 \003(\0132\n.BlockInfo\022\024\n\014eye_in_block\030\032" +
-      " \001(\010\022\023\n\013suffocating\030\033 \001(\010\022\'\n\rchat_messag" +
-      "es\030\034 \003(\0132\020.ChatMessageInfo\022\036\n\nbiome_info" +
-      "\030\035 \001(\0132\n.BiomeInfo\022#\n\rnearby_biomes\030\036 \003(" +
-      "\0132\014.NearbyBiome\022\032\n\022submerged_in_water\030\037 " +
-      "\001(\010\022\022\n\nis_in_lava\030  \001(\010\022\031\n\021submerged_in_" +
-      "lava\030! \001(\010\022 \n\013height_info\030\" \003(\0132\013.Height" +
-      "Info\022\024\n\014is_on_ground\030# \001(\010\022\031\n\021is_touchin" +
-      "g_water\030$ \001(\010\022\022\n\nipc_handle\030% \001(\014\022\021\n\005dep" +
-      "th\030& \003(\002B\002\020\001\022-\n\020block_collisions\030\' \003(\0132\023" +
-      ".BlockCollisionInfo\022/\n\021entity_collisions" +
-      "\030( \003(\0132\024.EntityCollisionInfo\022\022\n\nvelocity" +
-      "_x\030) \001(\001\022\022\n\nvelocity_y\030* \001(\001\022\022\n\nvelocity" +
-      "_z\030+ \001(\001\022\"\n\014lidar_result\030, \001(\0132\014.LidarRe" +
-      "sult\0327\n\025KilledStatisticsEntry\022\013\n\003key\030\001 \001" +
-      "(\t\022\r\n\005value\030\002 \001(\005:\0028\001\0326\n\024MinedStatistics" +
-      "Entry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\005:\0028\001\0325\n" +
-      "\023MiscStatisticsEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005val" +
-      "ue\030\002 \001(\005:\0028\001\032S\n\030SurroundingEntitiesEntry" +
-      "\022\013\n\003key\030\001 \001(\005\022&\n\005value\030\002 \001(\0132\027.EntitiesW" +
-      "ithinDistance:\0028\001B%\n#com.kyhsgeekcode.mi" +
-      "necraftenv.protob\006proto3"
+      "ation_key\030\004 \001(\t\022\023\n\013block_state\030\005 \001(\t\"\230\001\n" +
+      "\nEntityInfo\022\023\n\013unique_name\030\001 \001(\t\022\027\n\017tran" +
+      "slation_key\030\002 \001(\t\022\t\n\001x\030\003 \001(\001\022\t\n\001y\030\004 \001(\001\022" +
+      "\t\n\001z\030\005 \001(\001\022\013\n\003yaw\030\006 \001(\001\022\r\n\005pitch\030\007 \001(\001\022\016" +
+      "\n\006health\030\010 \001(\001\022\017\n\007in_love\030\t \001(\010\"\231\001\n\tHitR" +
+      "esult\022\035\n\004type\030\001 \001(\0162\017.HitResult.Type\022 \n\014" +
+      "target_block\030\002 \001(\0132\n.BlockInfo\022\"\n\rtarget" +
+      "_entity\030\003 \001(\0132\013.EntityInfo\"\'\n\004Type\022\010\n\004MI" +
+      "SS\020\000\022\t\n\005BLOCK\020\001\022\n\n\006ENTITY\020\002\"L\n\014StatusEff" +
+      "ect\022\027\n\017translation_key\030\001 \001(\t\022\020\n\010duration" +
+      "\030\002 \001(\005\022\021\n\tamplifier\030\003 \001(\005\"Q\n\nSoundEntry\022" +
+      "\025\n\rtranslate_key\030\001 \001(\t\022\013\n\003age\030\002 \001(\003\022\t\n\001x" +
+      "\030\003 \001(\001\022\t\n\001y\030\004 \001(\001\022\t\n\001z\030\005 \001(\001\"7\n\026Entities" +
+      "WithinDistance\022\035\n\010entities\030\001 \003(\0132\013.Entit" +
+      "yInfo\"I\n\017ChatMessageInfo\022\022\n\nadded_time\030\001" +
+      " \001(\003\022\017\n\007message\030\002 \001(\t\022\021\n\tindicator\030\003 \001(\t" +
+      "\"U\n\tBiomeInfo\022\022\n\nbiome_name\030\001 \001(\t\022\020\n\010cen" +
+      "ter_x\030\002 \001(\005\022\020\n\010center_y\030\003 \001(\005\022\020\n\010center_" +
+      "z\030\004 \001(\005\"B\n\013NearbyBiome\022\022\n\nbiome_name\030\001 \001" +
+      "(\t\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\t\n\001z\030\004 \001(\005\"F\n\nH" +
+      "eightInfo\022\t\n\001x\030\001 \001(\005\022\t\n\001z\030\002 \001(\005\022\016\n\006heigh" +
+      "t\030\003 \001(\005\022\022\n\nblock_name\030\004 \001(\t\"I\n\022BlockColl" +
+      "isionInfo\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\t\n\001z\030\003 \001" +
+      "(\005\022\022\n\nblock_name\030\004 \001(\t\"K\n\023EntityCollisio" +
+      "nInfo\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002\022\023" +
+      "\n\013entity_name\030\004 \001(\t\"\211\001\n\010LidarRay\022\020\n\010dist" +
+      "ance\030\001 \001(\002\022\020\n\010hit_type\030\002 \001(\005\022\022\n\nblock_na" +
+      "me\030\003 \001(\t\022\023\n\013entity_name\030\004 \001(\t\022\030\n\020angle_h" +
+      "orizontal\030\005 \001(\002\022\026\n\016angle_vertical\030\006 \001(\002\"" +
+      "l\n\013LidarResult\022\027\n\004rays\030\001 \003(\0132\t.LidarRay\022" +
+      "\027\n\017horizontal_rays\030\002 \001(\005\022\025\n\rvertical_ray" +
+      "s\030\003 \001(\005\022\024\n\014max_distance\030\004 \001(\002\"\324\017\n\027Observ" +
+      "ationSpaceMessage\022\r\n\005image\030\001 \001(\014\022\t\n\001x\030\002 " +
+      "\001(\001\022\t\n\001y\030\003 \001(\001\022\t\n\001z\030\004 \001(\001\022\013\n\003yaw\030\005 \001(\001\022\r" +
+      "\n\005pitch\030\006 \001(\001\022\016\n\006health\030\007 \001(\001\022\022\n\nfood_le" +
+      "vel\030\010 \001(\001\022\030\n\020saturation_level\030\t \001(\001\022\017\n\007i" +
+      "s_dead\030\n \001(\010\022\035\n\tinventory\030\013 \003(\0132\n.ItemSt" +
+      "ack\022\"\n\016raycast_result\030\014 \001(\0132\n.HitResult\022" +
+      "$\n\017sound_subtitles\030\r \003(\0132\013.SoundEntry\022%\n" +
+      "\016status_effects\030\016 \003(\0132\r.StatusEffect\022I\n\021" +
+      "killed_statistics\030\017 \003(\0132..ObservationSpa" +
+      "ceMessage.KilledStatisticsEntry\022G\n\020mined" +
+      "_statistics\030\020 \003(\0132-.ObservationSpaceMess" +
+      "age.MinedStatisticsEntry\022E\n\017misc_statist" +
+      "ics\030\021 \003(\0132,.ObservationSpaceMessage.Misc" +
+      "StatisticsEntry\022%\n\020visible_entities\030\022 \003(" +
+      "\0132\013.EntityInfo\022O\n\024surrounding_entities\030\023" +
+      " \003(\01321.ObservationSpaceMessage.Surroundi" +
+      "ngEntitiesEntry\022\025\n\rbobber_thrown\030\024 \001(\010\022\022" +
+      "\n\nexperience\030\025 \001(\005\022\022\n\nworld_time\030\026 \001(\003\022\032" +
+      "\n\022last_death_message\030\027 \001(\t\022\017\n\007image_2\030\030 " +
+      "\001(\014\022&\n\022surrounding_blocks\030\031 \003(\0132\n.BlockI" +
+      "nfo\022\024\n\014eye_in_block\030\032 \001(\010\022\023\n\013suffocating" +
+      "\030\033 \001(\010\022\'\n\rchat_messages\030\034 \003(\0132\020.ChatMess" +
+      "ageInfo\022\036\n\nbiome_info\030\035 \001(\0132\n.BiomeInfo\022" +
+      "#\n\rnearby_biomes\030\036 \003(\0132\014.NearbyBiome\022\032\n\022" +
+      "submerged_in_water\030\037 \001(\010\022\022\n\nis_in_lava\030 " +
+      " \001(\010\022\031\n\021submerged_in_lava\030! \001(\010\022 \n\013heigh" +
+      "t_info\030\" \003(\0132\013.HeightInfo\022\024\n\014is_on_groun" +
+      "d\030# \001(\010\022\031\n\021is_touching_water\030$ \001(\010\022\022\n\nip" +
+      "c_handle\030% \001(\014\022\021\n\005depth\030& \003(\002B\002\020\001\022-\n\020blo" +
+      "ck_collisions\030\' \003(\0132\023.BlockCollisionInfo" +
+      "\022/\n\021entity_collisions\030( \003(\0132\024.EntityColl" +
+      "isionInfo\022\022\n\nvelocity_x\030) \001(\001\022\022\n\nvelocit" +
+      "y_y\030* \001(\001\022\022\n\nvelocity_z\030+ \001(\001\022\"\n\014lidar_r" +
+      "esult\030, \001(\0132\014.LidarResult\022\032\n\rselected_sl" +
+      "ot\030- \001(\005H\000\210\001\001\022;\n\nused_items\030. \003(\0132\'.Obse" +
+      "rvationSpaceMessage.UsedItemsEntry\022D\n\017pi" +
+      "cked_up_items\030/ \003(\0132+.ObservationSpaceMe" +
+      "ssage.PickedUpItemsEntry\022\027\n\nworld_seed\0300" +
+      " \001(\003H\001\210\001\001\022\023\n\013time_of_day\0301 \001(\003\022\037\n\022client" +
+      "_time_of_day\0302 \001(\003H\002\210\001\001\0327\n\025KilledStatist" +
+      "icsEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\005:\0028\001" +
+      "\0326\n\024MinedStatisticsEntry\022\013\n\003key\030\001 \001(\t\022\r\n" +
+      "\005value\030\002 \001(\005:\0028\001\0325\n\023MiscStatisticsEntry\022" +
+      "\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\005:\0028\001\032S\n\030Surro" +
+      "undingEntitiesEntry\022\013\n\003key\030\001 \001(\005\022&\n\005valu" +
+      "e\030\002 \001(\0132\027.EntitiesWithinDistance:\0028\001\0320\n\016" +
+      "UsedItemsEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001" +
+      "(\005:\0028\001\0324\n\022PickedUpItemsEntry\022\013\n\003key\030\001 \001(" +
+      "\t\022\r\n\005value\030\002 \001(\005:\0028\001B\020\n\016_selected_slotB\r" +
+      "\n\013_world_seedB\025\n\023_client_time_of_dayB%\n#" +
+      "com.kyhsgeekcode.minecraftenv.protob\006pro" +
+      "to3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -21121,7 +22500,7 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
     internal_static_BlockInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_BlockInfo_descriptor,
-        new java.lang.String[] { "X", "Y", "Z", "TranslationKey", });
+        new java.lang.String[] { "X", "Y", "Z", "TranslationKey", "BlockState", });
     internal_static_EntityInfo_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_EntityInfo_fieldAccessorTable = new
@@ -21205,7 +22584,7 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
     internal_static_ObservationSpaceMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_ObservationSpaceMessage_descriptor,
-        new java.lang.String[] { "Image", "X", "Y", "Z", "Yaw", "Pitch", "Health", "FoodLevel", "SaturationLevel", "IsDead", "Inventory", "RaycastResult", "SoundSubtitles", "StatusEffects", "KilledStatistics", "MinedStatistics", "MiscStatistics", "VisibleEntities", "SurroundingEntities", "BobberThrown", "Experience", "WorldTime", "LastDeathMessage", "Image2", "SurroundingBlocks", "EyeInBlock", "Suffocating", "ChatMessages", "BiomeInfo", "NearbyBiomes", "SubmergedInWater", "IsInLava", "SubmergedInLava", "HeightInfo", "IsOnGround", "IsTouchingWater", "IpcHandle", "Depth", "BlockCollisions", "EntityCollisions", "VelocityX", "VelocityY", "VelocityZ", "LidarResult", });
+        new java.lang.String[] { "Image", "X", "Y", "Z", "Yaw", "Pitch", "Health", "FoodLevel", "SaturationLevel", "IsDead", "Inventory", "RaycastResult", "SoundSubtitles", "StatusEffects", "KilledStatistics", "MinedStatistics", "MiscStatistics", "VisibleEntities", "SurroundingEntities", "BobberThrown", "Experience", "WorldTime", "LastDeathMessage", "Image2", "SurroundingBlocks", "EyeInBlock", "Suffocating", "ChatMessages", "BiomeInfo", "NearbyBiomes", "SubmergedInWater", "IsInLava", "SubmergedInLava", "HeightInfo", "IsOnGround", "IsTouchingWater", "IpcHandle", "Depth", "BlockCollisions", "EntityCollisions", "VelocityX", "VelocityY", "VelocityZ", "LidarResult", "SelectedSlot", "UsedItems", "PickedUpItems", "WorldSeed", "TimeOfDay", "ClientTimeOfDay", });
     internal_static_ObservationSpaceMessage_KilledStatisticsEntry_descriptor =
       internal_static_ObservationSpaceMessage_descriptor.getNestedTypes().get(0);
     internal_static_ObservationSpaceMessage_KilledStatisticsEntry_fieldAccessorTable = new
@@ -21229,6 +22608,18 @@ com.kyhsgeekcode.minecraftenv.proto.ObservationSpace.EntitiesWithinDistance defa
     internal_static_ObservationSpaceMessage_SurroundingEntitiesEntry_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_ObservationSpaceMessage_SurroundingEntitiesEntry_descriptor,
+        new java.lang.String[] { "Key", "Value", });
+    internal_static_ObservationSpaceMessage_UsedItemsEntry_descriptor =
+      internal_static_ObservationSpaceMessage_descriptor.getNestedTypes().get(4);
+    internal_static_ObservationSpaceMessage_UsedItemsEntry_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_ObservationSpaceMessage_UsedItemsEntry_descriptor,
+        new java.lang.String[] { "Key", "Value", });
+    internal_static_ObservationSpaceMessage_PickedUpItemsEntry_descriptor =
+      internal_static_ObservationSpaceMessage_descriptor.getNestedTypes().get(5);
+    internal_static_ObservationSpaceMessage_PickedUpItemsEntry_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_ObservationSpaceMessage_PickedUpItemsEntry_descriptor,
         new java.lang.String[] { "Key", "Value", });
     descriptor.resolveAllFeaturesImmutable();
   }

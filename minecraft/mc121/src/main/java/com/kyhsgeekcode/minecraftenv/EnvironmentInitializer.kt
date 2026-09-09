@@ -565,10 +565,11 @@ class EnvironmentInitializer(
         }
 
         minecraftServer?.getSavePath(WorldSavePath.RESOURCES_ZIP)?.let { targetZipPath ->
+            if (initialEnvironment.resourceZipPath.isEmpty()) return@let
             println("Copying resource zip file to: $targetZipPath")
             val sourcePath = Path(initialEnvironment.resourceZipPath)
             // Check if the resource zip path exists
-            if (!Files.exists(sourcePath)) {
+            if (!Files.isRegularFile(sourcePath)) {
                 println("Resource zip path not found: $sourcePath")
                 return@let
             }
@@ -586,6 +587,7 @@ class EnvironmentInitializer(
         }
 
         minecraftServer?.getSavePath(WorldSavePath.ROOT)?.let { rootPath ->
+            if (initialEnvironment.mapDirPath.isEmpty()) return@let
             val dataPath = rootPath.resolve("data")
             println("Copying resource zip file to: $dataPath")
             val mapSrcPath = Path(initialEnvironment.mapDirPath)
@@ -614,6 +616,7 @@ class EnvironmentInitializer(
             commandExecutor.runCommand(player, c)
         }
         setUnlimitedTPS(myCommandExecutor)
+        commandExecutor.runCommand(this.player, "/difficulty ${initialEnvironment.difficulty.name.lowercase()}")
         for (command in initialEnvironment.initialExtraCommandsList) {
             commandExecutor.runCommand(this.player, "/$command")
         }
