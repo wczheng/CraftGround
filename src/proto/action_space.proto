@@ -31,4 +31,7 @@ message ActionSpaceMessageV2 {
   float camera_yaw = 22;
 
   repeated string commands = 23;
+
+  // Use held food directly, without block/entity interaction (mc121).
+  bool eat = 24;
 }

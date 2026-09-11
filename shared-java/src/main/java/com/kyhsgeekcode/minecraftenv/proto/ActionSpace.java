@@ -197,6 +197,16 @@ public final class ActionSpace {
      */
     com.google.protobuf.ByteString
         getCommandsBytes(int index);
+
+    /**
+     * <pre>
+     * Use held food directly, without block/entity interaction (mc121).
+     * </pre>
+     *
+     * <code>bool eat = 24;</code>
+     * @return The eat.
+     */
+    boolean getEat();
   }
   /**
    * Protobuf type {@code ActionSpaceMessageV2}
@@ -528,6 +538,21 @@ public final class ActionSpace {
       return commands_.getByteString(index);
     }
 
+    public static final int EAT_FIELD_NUMBER = 24;
+    private boolean eat_ = false;
+    /**
+     * <pre>
+     * Use held food directly, without block/entity interaction (mc121).
+     * </pre>
+     *
+     * <code>bool eat = 24;</code>
+     * @return The eat.
+     */
+    @java.lang.Override
+    public boolean getEat() {
+      return eat_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -610,6 +635,9 @@ public final class ActionSpace {
       }
       for (int i = 0; i < commands_.size(); i++) {
         com.google.protobuf.GeneratedMessage.writeString(output, 23, commands_.getRaw(i));
+      }
+      if (eat_ != false) {
+        output.writeBool(24, eat_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -716,6 +744,10 @@ public final class ActionSpace {
         size += dataSize;
         size += 2 * getCommandsList().size();
       }
+      if (eat_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(24, eat_);
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -779,6 +811,8 @@ public final class ActionSpace {
               other.getCameraYaw())) return false;
       if (!getCommandsList()
           .equals(other.getCommandsList())) return false;
+      if (getEat()
+          != other.getEat()) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -860,6 +894,9 @@ public final class ActionSpace {
         hash = (37 * hash) + COMMANDS_FIELD_NUMBER;
         hash = (53 * hash) + getCommandsList().hashCode();
       }
+      hash = (37 * hash) + EAT_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getEat());
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1015,6 +1052,7 @@ public final class ActionSpace {
         cameraYaw_ = 0F;
         commands_ =
             com.google.protobuf.LazyStringArrayList.emptyList();
+        eat_ = false;
         return this;
       }
 
@@ -1118,6 +1156,9 @@ public final class ActionSpace {
           commands_.makeImmutable();
           result.commands_ = commands_;
         }
+        if (((from_bitField0_ & 0x00800000) != 0)) {
+          result.eat_ = eat_;
+        }
       }
 
       @java.lang.Override
@@ -1207,6 +1248,9 @@ public final class ActionSpace {
             commands_.addAll(other.commands_);
           }
           onChanged();
+        }
+        if (other.getEat() != false) {
+          setEat(other.getEat());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
@@ -1350,6 +1394,11 @@ public final class ActionSpace {
                 commands_.add(s);
                 break;
               } // case 186
+              case 192: {
+                eat_ = input.readBool();
+                bitField0_ |= 0x00800000;
+                break;
+              } // case 192
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -2218,6 +2267,50 @@ public final class ActionSpace {
         return this;
       }
 
+      private boolean eat_ ;
+      /**
+       * <pre>
+       * Use held food directly, without block/entity interaction (mc121).
+       * </pre>
+       *
+       * <code>bool eat = 24;</code>
+       * @return The eat.
+       */
+      @java.lang.Override
+      public boolean getEat() {
+        return eat_;
+      }
+      /**
+       * <pre>
+       * Use held food directly, without block/entity interaction (mc121).
+       * </pre>
+       *
+       * <code>bool eat = 24;</code>
+       * @param value The eat to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEat(boolean value) {
+
+        eat_ = value;
+        bitField0_ |= 0x00800000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Use held food directly, without block/entity interaction (mc121).
+       * </pre>
+       *
+       * <code>bool eat = 24;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearEat() {
+        bitField0_ = (bitField0_ & ~0x00800000);
+        eat_ = false;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:ActionSpaceMessageV2)
     }
 
@@ -2283,7 +2376,7 @@ public final class ActionSpace {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\030proto/action_space.proto\"\233\003\n\024ActionSpa" +
+      "\n\030proto/action_space.proto\"\250\003\n\024ActionSpa" +
       "ceMessageV2\022\016\n\006attack\030\001 \001(\010\022\014\n\004back\030\002 \001(" +
       "\010\022\017\n\007forward\030\003 \001(\010\022\014\n\004jump\030\004 \001(\010\022\014\n\004left" +
       "\030\005 \001(\010\022\r\n\005right\030\006 \001(\010\022\r\n\005sneak\030\007 \001(\010\022\016\n\006" +
@@ -2294,8 +2387,8 @@ public final class ActionSpace {
       "\030\021 \001(\010\022\020\n\010hotbar_7\030\022 \001(\010\022\020\n\010hotbar_8\030\023 \001" +
       "(\010\022\020\n\010hotbar_9\030\024 \001(\010\022\024\n\014camera_pitch\030\025 \001" +
       "(\002\022\022\n\ncamera_yaw\030\026 \001(\002\022\020\n\010commands\030\027 \003(\t" +
-      "B%\n#com.kyhsgeekcode.minecraftenv.protob" +
-      "\006proto3"
+      "\022\013\n\003eat\030\030 \001(\010B%\n#com.kyhsgeekcode.minecr" +
+      "aftenv.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -2306,7 +2399,7 @@ public final class ActionSpace {
     internal_static_ActionSpaceMessageV2_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_ActionSpaceMessageV2_descriptor,
-        new java.lang.String[] { "Attack", "Back", "Forward", "Jump", "Left", "Right", "Sneak", "Sprint", "Use", "Drop", "Inventory", "Hotbar1", "Hotbar2", "Hotbar3", "Hotbar4", "Hotbar5", "Hotbar6", "Hotbar7", "Hotbar8", "Hotbar9", "CameraPitch", "CameraYaw", "Commands", });
+        new java.lang.String[] { "Attack", "Back", "Forward", "Jump", "Left", "Right", "Sneak", "Sprint", "Use", "Drop", "Inventory", "Hotbar1", "Hotbar2", "Hotbar3", "Hotbar4", "Hotbar5", "Hotbar6", "Hotbar7", "Hotbar8", "Hotbar9", "CameraPitch", "CameraYaw", "Commands", "Eat", });
     descriptor.resolveAllFeaturesImmutable();
   }
 

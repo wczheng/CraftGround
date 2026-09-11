@@ -112,6 +112,7 @@ class MinecraftEnv :
     private var skipSync = false
     private var ioPhase = IOPhase.BEGINNING
     private var useSharedMemory = false
+    private var registryWritten = false
 
     override fun onInitialize() {
         val isLdPreloadSet = System.getenv("LD_PRELOAD")
@@ -214,6 +215,21 @@ class MinecraftEnv :
         val initializer = EnvironmentInitializer(initialEnvironment, csvLogger)
         ClientTickEvents.START_CLIENT_TICK.register(
             ClientTickEvents.StartTick { client: MinecraftClient ->
+                if (!registryWritten) {
+                    val items = Registries.ITEM.sortedBy { Registries.ITEM.getRawId(it) }
+                        .map { Registries.ITEM.getId(it).toString() }
+                    Files.writeString(client.runDirectory.toPath().resolve("item-registry.json"),
+                        com.google.gson.Gson().toJson(items))
+                    Files.writeString(
+                        client.runDirectory.toPath().resolve("renderer.json"),
+                        com.google.gson.Gson().toJson(mapOf(
+                            "vendor" to org.lwjgl.opengl.GL11.glGetString(org.lwjgl.opengl.GL11.GL_VENDOR),
+                            "renderer" to org.lwjgl.opengl.GL11.glGetString(org.lwjgl.opengl.GL11.GL_RENDERER),
+                            "version" to org.lwjgl.opengl.GL11.glGetString(org.lwjgl.opengl.GL11.GL_VERSION),
+                        )),
+                    )
+                    registryWritten = true
+                }
                 printWithTime("Start Client tick")
                 csvLogger.profileStartPrint("Minecraft_env/onInitialize/ClientTick")
                 initializer.onClientTick(client)
@@ -694,6 +710,9 @@ class MinecraftEnv :
                         if (used > 0) usedItems[id] = used
                     }
                     pickedUpItems.putAll(ItemPickupTracker.get(player.uuid))
+                    miscStatistics["player_events_version"] = 1
+                    miscStatistics["survival_actions_version"] = 2
+                    miscStatistics.putAll(PlayerEventTracker.get(player.uuid))
                     val allItems =
                         sequenceOf(
                             player.inventory.main,

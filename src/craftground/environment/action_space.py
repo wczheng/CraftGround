@@ -31,6 +31,7 @@ def no_op_v2() -> Dict[str, Union[bool, float]]:
         "sneak",
         "sprint",
         "use",
+        "eat",
         "drop",
         "inventory",
     ]:
@@ -53,6 +54,7 @@ def translate_action_to_v2(action: ActType) -> Dict[str, Union[bool, float]]:
         "sneak": action[2] == 2,
         "sprint": action[2] == 3,
         "use": action[5] == 1,
+        "eat": False,
         "drop": action[5] == 2,
         "inventory": False,
     }
@@ -78,6 +80,7 @@ def action_v2_dict_to_message(
     action_space.sneak = action_v2["sneak"]
     action_space.sprint = action_v2["sprint"]
     action_space.use = action_v2["use"]
+    action_space.eat = action_v2["eat"]
     action_space.drop = action_v2["drop"]
     action_space.inventory = action_v2["inventory"]
     action_space.hotbar_1 = action_v2["hotbar.1"]
@@ -180,6 +183,7 @@ def declare_action_space(action_space_version: ActionSpaceVersion) -> gym.spaces
                 "sneak": gym.spaces.Discrete(2),  # 0 or 1 (boolean)
                 "sprint": gym.spaces.Discrete(2),  # 0 or 1 (boolean)
                 "use": gym.spaces.Discrete(2),  # 0 or 1 (boolean)
+                "eat": gym.spaces.Discrete(2),
                 "drop": gym.spaces.Discrete(2),  # 0 or 1 (boolean)
                 "inventory": gym.spaces.Discrete(2),  # 0 or 1 (boolean)
                 "hotbar.1": gym.spaces.Discrete(2),  # 0 or 1 (boolean)

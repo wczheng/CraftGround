@@ -495,7 +495,32 @@ public object ActionSpaceMessageV2Kt {
     @kotlin.jvm.JvmName("clearCommands")
     public fun com.google.protobuf.kotlin.DslList<kotlin.String, CommandsProxy>.clear() {
       _builder.clearCommands()
-    }}
+    }
+    /**
+     * ```
+     * Use held food directly, without block/entity interaction (mc121).
+     * ```
+     *
+     * `bool eat = 24;`
+     */
+    public var eat: kotlin.Boolean
+      @JvmName("getEat")
+      get() = _builder.eat
+      @JvmName("setEat")
+      set(value) {
+        _builder.eat = value
+      }
+    /**
+     * ```
+     * Use held food directly, without block/entity interaction (mc121).
+     * ```
+     *
+     * `bool eat = 24;`
+     */
+    public fun clearEat() {
+      _builder.clearEat()
+    }
+  }
 }
 @kotlin.jvm.JvmSynthetic
 public inline fun com.kyhsgeekcode.minecraftenv.proto.ActionSpace.ActionSpaceMessageV2.copy(block: `com.kyhsgeekcode.minecraftenv.proto`.ActionSpaceMessageV2Kt.Dsl.() -> kotlin.Unit): com.kyhsgeekcode.minecraftenv.proto.ActionSpace.ActionSpaceMessageV2 =

@@ -10,13 +10,15 @@
     "RenderMixin",
     "SaveWorldMixin",
     "ServerPlayNetworkHandlerDisableSpamChecker",
-    "ItemPickupMixin"
+    "ItemPickupMixin",
+    "PlayerEventMixin"
   ],
   "client": [
     "ChatVisibleMessageAccessor",
     "ClientCommonNetworkHandlerClientAccessor",
     "ClientEntityRenderDispatcherAccessor",
     "ClientIsWindowFocusedMixin",
+    "EatActionMixin",
     "ClientPlayNetworkHandlerMixin",
     "ClientRenderInvoker",
     "ClientWorldMixin",

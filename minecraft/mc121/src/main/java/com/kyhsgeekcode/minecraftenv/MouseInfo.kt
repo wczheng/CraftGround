@@ -13,6 +13,7 @@ import org.lwjgl.glfw.GLFWCursorPosCallbackI
 import org.lwjgl.glfw.GLFWMouseButtonCallbackI
 
 object MouseInfo {
+    var eat: Boolean = false
     var handle: Long = 0
     var cursorPosCallback: GLFWCursorPosCallbackI? = null
     var mouseButtonCallback: GLFWMouseButtonCallbackI? = null
@@ -28,9 +29,10 @@ object MouseInfo {
         )
 
     fun onAction(actionDict: ActionSpace.ActionSpaceMessageV2) {
+        eat = actionDict.eat
         val actions =
             mapOf(
-                "use" to actionDict.use,
+                "use" to (actionDict.use || eat),
                 "attack" to actionDict.attack,
             )
         val shift = KeyboardInfo.isKeyPressed(GLFW_KEY_LEFT_SHIFT)

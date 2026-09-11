@@ -6,7 +6,7 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Optional as _Op
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class ActionSpaceMessageV2(_message.Message):
-    __slots__ = ("attack", "back", "forward", "jump", "left", "right", "sneak", "sprint", "use", "drop", "inventory", "hotbar_1", "hotbar_2", "hotbar_3", "hotbar_4", "hotbar_5", "hotbar_6", "hotbar_7", "hotbar_8", "hotbar_9", "camera_pitch", "camera_yaw", "commands")
+    __slots__ = ("attack", "back", "forward", "jump", "left", "right", "sneak", "sprint", "use", "drop", "inventory", "hotbar_1", "hotbar_2", "hotbar_3", "hotbar_4", "hotbar_5", "hotbar_6", "hotbar_7", "hotbar_8", "hotbar_9", "camera_pitch", "camera_yaw", "commands", "eat")
     ATTACK_FIELD_NUMBER: _ClassVar[int]
     BACK_FIELD_NUMBER: _ClassVar[int]
     FORWARD_FIELD_NUMBER: _ClassVar[int]
@@ -30,6 +30,7 @@ class ActionSpaceMessageV2(_message.Message):
     CAMERA_PITCH_FIELD_NUMBER: _ClassVar[int]
     CAMERA_YAW_FIELD_NUMBER: _ClassVar[int]
     COMMANDS_FIELD_NUMBER: _ClassVar[int]
+    EAT_FIELD_NUMBER: _ClassVar[int]
     attack: bool
     back: bool
     forward: bool
@@ -53,4 +54,5 @@ class ActionSpaceMessageV2(_message.Message):
     camera_pitch: float
     camera_yaw: float
     commands: _containers.RepeatedScalarFieldContainer[str]
-    def __init__(self, attack: bool = ..., back: bool = ..., forward: bool = ..., jump: bool = ..., left: bool = ..., right: bool = ..., sneak: bool = ..., sprint: bool = ..., use: bool = ..., drop: bool = ..., inventory: bool = ..., hotbar_1: bool = ..., hotbar_2: bool = ..., hotbar_3: bool = ..., hotbar_4: bool = ..., hotbar_5: bool = ..., hotbar_6: bool = ..., hotbar_7: bool = ..., hotbar_8: bool = ..., hotbar_9: bool = ..., camera_pitch: _Optional[float] = ..., camera_yaw: _Optional[float] = ..., commands: _Optional[_Iterable[str]] = ...) -> None: ...
+    eat: bool
+    def __init__(self, attack: bool = ..., back: bool = ..., forward: bool = ..., jump: bool = ..., left: bool = ..., right: bool = ..., sneak: bool = ..., sprint: bool = ..., use: bool = ..., drop: bool = ..., inventory: bool = ..., hotbar_1: bool = ..., hotbar_2: bool = ..., hotbar_3: bool = ..., hotbar_4: bool = ..., hotbar_5: bool = ..., hotbar_6: bool = ..., hotbar_7: bool = ..., hotbar_8: bool = ..., hotbar_9: bool = ..., camera_pitch: _Optional[float] = ..., camera_yaw: _Optional[float] = ..., commands: _Optional[_Iterable[str]] = ..., eat: bool = ...) -> None: ...
