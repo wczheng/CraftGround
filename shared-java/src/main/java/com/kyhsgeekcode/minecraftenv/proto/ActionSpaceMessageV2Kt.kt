@@ -520,6 +520,72 @@ public object ActionSpaceMessageV2Kt {
     public fun clearEat() {
       _builder.clearEat()
     }
+
+    /**
+     * `optional sint64 reset_world_seed = 25;`
+     */
+    public var resetWorldSeed: kotlin.Long
+      @JvmName("getResetWorldSeed")
+      get() = _builder.resetWorldSeed
+      @JvmName("setResetWorldSeed")
+      set(value) {
+        _builder.resetWorldSeed = value
+      }
+    /**
+     * `optional sint64 reset_world_seed = 25;`
+     */
+    public fun clearResetWorldSeed() {
+      _builder.clearResetWorldSeed()
+    }
+    /**
+     * `optional sint64 reset_world_seed = 25;`
+     * @return Whether the resetWorldSeed field is set.
+     */
+    public fun hasResetWorldSeed(): kotlin.Boolean {
+      return _builder.hasResetWorldSeed()
+    }
+
+    /**
+     * ```
+     * Zero means a single tick. A batch stops early on death or completed eat.
+     * ```
+     *
+     * `uint32 ticks = 26;`
+     */
+    public var ticks: kotlin.Int
+      @JvmName("getTicks")
+      get() = _builder.ticks
+      @JvmName("setTicks")
+      set(value) {
+        _builder.ticks = value
+      }
+    /**
+     * ```
+     * Zero means a single tick. A batch stops early on death or completed eat.
+     * ```
+     *
+     * `uint32 ticks = 26;`
+     */
+    public fun clearTicks() {
+      _builder.clearTicks()
+    }
+
+    /**
+     * `bool omit_diagnostics = 27;`
+     */
+    public var omitDiagnostics: kotlin.Boolean
+      @JvmName("getOmitDiagnostics")
+      get() = _builder.omitDiagnostics
+      @JvmName("setOmitDiagnostics")
+      set(value) {
+        _builder.omitDiagnostics = value
+      }
+    /**
+     * `bool omit_diagnostics = 27;`
+     */
+    public fun clearOmitDiagnostics() {
+      _builder.clearOmitDiagnostics()
+    }
   }
 }
 @kotlin.jvm.JvmSynthetic

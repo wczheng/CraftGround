@@ -82,11 +82,11 @@ class SocketIPC(IPCInterface):
         self.sock.sendall(v)
         self.logger.log("Sent action and commands")
 
-    def read_observation(self) -> ObservationSpaceMessage:
+    def read_observation(self, wait: bool = True) -> ObservationSpaceMessage:
         self.logger.log("Reading response...")
-        data_len_bytes = self.buffered_socket.read(4, True)
+        data_len_bytes = self.buffered_socket.read(4, wait)
         data_len = struct.unpack("<I", data_len_bytes)[0]
-        data_bytes = self.buffered_socket.read(data_len, True)
+        data_bytes = self.buffered_socket.read(data_len, wait)
         observation_space = ObservationSpaceMessage()
         observation_space.ParseFromString(data_bytes)
         self.logger.log(f"Got response with size {data_len}")

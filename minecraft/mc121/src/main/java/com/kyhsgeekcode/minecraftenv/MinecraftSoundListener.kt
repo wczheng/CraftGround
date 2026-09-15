@@ -45,6 +45,8 @@ class MinecraftSoundListener(
     private val _entries: MutableList<SoundEntry> = mutableListOf()
     val entries = _entries as List<SoundEntry>
 
+    fun clear() = _entries.clear()
+
     override fun onSoundPlayed(
         sound: SoundInstance?,
         soundSet: WeightedSoundSet?,

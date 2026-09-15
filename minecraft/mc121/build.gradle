@@ -150,6 +150,17 @@ tasks.named('runClient') {
             jvmArgs += "-Djava.rmi.server.hostname=${jmxHost}"
         }
 //        environment.put("LD_PRELOAD", "libjemalloc.so")
+        if (project.hasProperty('exportClientLaunch')) {
+            def command = [javaLauncher.get().executablePath.asFile.absolutePath]
+            command += (allJvmArgs + jvmArgs + jvmArguments.get()).findAll { !it.startsWith('@') }.unique()
+            command += ['-cp', classpath.asPath, mainClass.get()]
+            command += args
+            argumentProviders.each { command += it.asArguments() }
+            def destination = layout.buildDirectory.file('native-client.json').get().asFile
+            destination.parentFile.mkdirs()
+            destination.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(command))
+            throw new StopExecutionException('Exported direct client command; no game launched')
+        }
     }
 }
 

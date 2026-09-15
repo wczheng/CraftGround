@@ -29,6 +29,7 @@ def make(
     no_threaded_optimizations=True,
     find_free_port=True,
     runtime_dir=None,
+    launch_command=None,
 ) -> CraftGroundEnvironment:
     if not initial_env_config:
         initial_env_config = InitialEnvironmentConfig()
@@ -55,4 +56,5 @@ def make(
         use_shared_memory=use_shared_memory,
         profile_jni=profile_jni,
         runtime_dir=runtime_dir,
+        launch_command=launch_command,
     )

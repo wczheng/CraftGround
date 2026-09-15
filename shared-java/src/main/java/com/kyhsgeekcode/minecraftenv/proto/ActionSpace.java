@@ -207,6 +207,33 @@ public final class ActionSpace {
      * @return The eat.
      */
     boolean getEat();
+
+    /**
+     * <code>optional sint64 reset_world_seed = 25;</code>
+     * @return Whether the resetWorldSeed field is set.
+     */
+    boolean hasResetWorldSeed();
+    /**
+     * <code>optional sint64 reset_world_seed = 25;</code>
+     * @return The resetWorldSeed.
+     */
+    long getResetWorldSeed();
+
+    /**
+     * <pre>
+     * Zero means a single tick. A batch stops early on death or completed eat.
+     * </pre>
+     *
+     * <code>uint32 ticks = 26;</code>
+     * @return The ticks.
+     */
+    int getTicks();
+
+    /**
+     * <code>bool omit_diagnostics = 27;</code>
+     * @return The omitDiagnostics.
+     */
+    boolean getOmitDiagnostics();
   }
   /**
    * Protobuf type {@code ActionSpaceMessageV2}
@@ -247,6 +274,7 @@ public final class ActionSpace {
               com.kyhsgeekcode.minecraftenv.proto.ActionSpace.ActionSpaceMessageV2.class, com.kyhsgeekcode.minecraftenv.proto.ActionSpace.ActionSpaceMessageV2.Builder.class);
     }
 
+    private int bitField0_;
     public static final int ATTACK_FIELD_NUMBER = 1;
     private boolean attack_ = false;
     /**
@@ -553,6 +581,51 @@ public final class ActionSpace {
       return eat_;
     }
 
+    public static final int RESET_WORLD_SEED_FIELD_NUMBER = 25;
+    private long resetWorldSeed_ = 0L;
+    /**
+     * <code>optional sint64 reset_world_seed = 25;</code>
+     * @return Whether the resetWorldSeed field is set.
+     */
+    @java.lang.Override
+    public boolean hasResetWorldSeed() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>optional sint64 reset_world_seed = 25;</code>
+     * @return The resetWorldSeed.
+     */
+    @java.lang.Override
+    public long getResetWorldSeed() {
+      return resetWorldSeed_;
+    }
+
+    public static final int TICKS_FIELD_NUMBER = 26;
+    private int ticks_ = 0;
+    /**
+     * <pre>
+     * Zero means a single tick. A batch stops early on death or completed eat.
+     * </pre>
+     *
+     * <code>uint32 ticks = 26;</code>
+     * @return The ticks.
+     */
+    @java.lang.Override
+    public int getTicks() {
+      return ticks_;
+    }
+
+    public static final int OMIT_DIAGNOSTICS_FIELD_NUMBER = 27;
+    private boolean omitDiagnostics_ = false;
+    /**
+     * <code>bool omit_diagnostics = 27;</code>
+     * @return The omitDiagnostics.
+     */
+    @java.lang.Override
+    public boolean getOmitDiagnostics() {
+      return omitDiagnostics_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -638,6 +711,15 @@ public final class ActionSpace {
       }
       if (eat_ != false) {
         output.writeBool(24, eat_);
+      }
+      if (((bitField0_ & 0x00000001) != 0)) {
+        output.writeSInt64(25, resetWorldSeed_);
+      }
+      if (ticks_ != 0) {
+        output.writeUInt32(26, ticks_);
+      }
+      if (omitDiagnostics_ != false) {
+        output.writeBool(27, omitDiagnostics_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -748,6 +830,18 @@ public final class ActionSpace {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(24, eat_);
       }
+      if (((bitField0_ & 0x00000001) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeSInt64Size(25, resetWorldSeed_);
+      }
+      if (ticks_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(26, ticks_);
+      }
+      if (omitDiagnostics_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(27, omitDiagnostics_);
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -813,6 +907,15 @@ public final class ActionSpace {
           .equals(other.getCommandsList())) return false;
       if (getEat()
           != other.getEat()) return false;
+      if (hasResetWorldSeed() != other.hasResetWorldSeed()) return false;
+      if (hasResetWorldSeed()) {
+        if (getResetWorldSeed()
+            != other.getResetWorldSeed()) return false;
+      }
+      if (getTicks()
+          != other.getTicks()) return false;
+      if (getOmitDiagnostics()
+          != other.getOmitDiagnostics()) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -897,6 +1000,16 @@ public final class ActionSpace {
       hash = (37 * hash) + EAT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getEat());
+      if (hasResetWorldSeed()) {
+        hash = (37 * hash) + RESET_WORLD_SEED_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getResetWorldSeed());
+      }
+      hash = (37 * hash) + TICKS_FIELD_NUMBER;
+      hash = (53 * hash) + getTicks();
+      hash = (37 * hash) + OMIT_DIAGNOSTICS_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getOmitDiagnostics());
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1053,6 +1166,9 @@ public final class ActionSpace {
         commands_ =
             com.google.protobuf.LazyStringArrayList.emptyList();
         eat_ = false;
+        resetWorldSeed_ = 0L;
+        ticks_ = 0;
+        omitDiagnostics_ = false;
         return this;
       }
 
@@ -1159,6 +1275,18 @@ public final class ActionSpace {
         if (((from_bitField0_ & 0x00800000) != 0)) {
           result.eat_ = eat_;
         }
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x01000000) != 0)) {
+          result.resetWorldSeed_ = resetWorldSeed_;
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x02000000) != 0)) {
+          result.ticks_ = ticks_;
+        }
+        if (((from_bitField0_ & 0x04000000) != 0)) {
+          result.omitDiagnostics_ = omitDiagnostics_;
+        }
+        result.bitField0_ |= to_bitField0_;
       }
 
       @java.lang.Override
@@ -1251,6 +1379,15 @@ public final class ActionSpace {
         }
         if (other.getEat() != false) {
           setEat(other.getEat());
+        }
+        if (other.hasResetWorldSeed()) {
+          setResetWorldSeed(other.getResetWorldSeed());
+        }
+        if (other.getTicks() != 0) {
+          setTicks(other.getTicks());
+        }
+        if (other.getOmitDiagnostics() != false) {
+          setOmitDiagnostics(other.getOmitDiagnostics());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
@@ -1399,6 +1536,21 @@ public final class ActionSpace {
                 bitField0_ |= 0x00800000;
                 break;
               } // case 192
+              case 200: {
+                resetWorldSeed_ = input.readSInt64();
+                bitField0_ |= 0x01000000;
+                break;
+              } // case 200
+              case 208: {
+                ticks_ = input.readUInt32();
+                bitField0_ |= 0x02000000;
+                break;
+              } // case 208
+              case 216: {
+                omitDiagnostics_ = input.readBool();
+                bitField0_ |= 0x04000000;
+                break;
+              } // case 216
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -2311,6 +2463,122 @@ public final class ActionSpace {
         return this;
       }
 
+      private long resetWorldSeed_ ;
+      /**
+       * <code>optional sint64 reset_world_seed = 25;</code>
+       * @return Whether the resetWorldSeed field is set.
+       */
+      @java.lang.Override
+      public boolean hasResetWorldSeed() {
+        return ((bitField0_ & 0x01000000) != 0);
+      }
+      /**
+       * <code>optional sint64 reset_world_seed = 25;</code>
+       * @return The resetWorldSeed.
+       */
+      @java.lang.Override
+      public long getResetWorldSeed() {
+        return resetWorldSeed_;
+      }
+      /**
+       * <code>optional sint64 reset_world_seed = 25;</code>
+       * @param value The resetWorldSeed to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResetWorldSeed(long value) {
+
+        resetWorldSeed_ = value;
+        bitField0_ |= 0x01000000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional sint64 reset_world_seed = 25;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearResetWorldSeed() {
+        bitField0_ = (bitField0_ & ~0x01000000);
+        resetWorldSeed_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private int ticks_ ;
+      /**
+       * <pre>
+       * Zero means a single tick. A batch stops early on death or completed eat.
+       * </pre>
+       *
+       * <code>uint32 ticks = 26;</code>
+       * @return The ticks.
+       */
+      @java.lang.Override
+      public int getTicks() {
+        return ticks_;
+      }
+      /**
+       * <pre>
+       * Zero means a single tick. A batch stops early on death or completed eat.
+       * </pre>
+       *
+       * <code>uint32 ticks = 26;</code>
+       * @param value The ticks to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTicks(int value) {
+
+        ticks_ = value;
+        bitField0_ |= 0x02000000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Zero means a single tick. A batch stops early on death or completed eat.
+       * </pre>
+       *
+       * <code>uint32 ticks = 26;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTicks() {
+        bitField0_ = (bitField0_ & ~0x02000000);
+        ticks_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private boolean omitDiagnostics_ ;
+      /**
+       * <code>bool omit_diagnostics = 27;</code>
+       * @return The omitDiagnostics.
+       */
+      @java.lang.Override
+      public boolean getOmitDiagnostics() {
+        return omitDiagnostics_;
+      }
+      /**
+       * <code>bool omit_diagnostics = 27;</code>
+       * @param value The omitDiagnostics to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOmitDiagnostics(boolean value) {
+
+        omitDiagnostics_ = value;
+        bitField0_ |= 0x04000000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool omit_diagnostics = 27;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOmitDiagnostics() {
+        bitField0_ = (bitField0_ & ~0x04000000);
+        omitDiagnostics_ = false;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:ActionSpaceMessageV2)
     }
 
@@ -2376,7 +2644,7 @@ public final class ActionSpace {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\030proto/action_space.proto\"\250\003\n\024ActionSpa" +
+      "\n\030proto/action_space.proto\"\205\004\n\024ActionSpa" +
       "ceMessageV2\022\016\n\006attack\030\001 \001(\010\022\014\n\004back\030\002 \001(" +
       "\010\022\017\n\007forward\030\003 \001(\010\022\014\n\004jump\030\004 \001(\010\022\014\n\004left" +
       "\030\005 \001(\010\022\r\n\005right\030\006 \001(\010\022\r\n\005sneak\030\007 \001(\010\022\016\n\006" +
@@ -2387,8 +2655,10 @@ public final class ActionSpace {
       "\030\021 \001(\010\022\020\n\010hotbar_7\030\022 \001(\010\022\020\n\010hotbar_8\030\023 \001" +
       "(\010\022\020\n\010hotbar_9\030\024 \001(\010\022\024\n\014camera_pitch\030\025 \001" +
       "(\002\022\022\n\ncamera_yaw\030\026 \001(\002\022\020\n\010commands\030\027 \003(\t" +
-      "\022\013\n\003eat\030\030 \001(\010B%\n#com.kyhsgeekcode.minecr" +
-      "aftenv.protob\006proto3"
+      "\022\013\n\003eat\030\030 \001(\010\022\035\n\020reset_world_seed\030\031 \001(\022H" +
+      "\000\210\001\001\022\r\n\005ticks\030\032 \001(\r\022\030\n\020omit_diagnostics\030" +
+      "\033 \001(\010B\023\n\021_reset_world_seedB%\n#com.kyhsge" +
+      "ekcode.minecraftenv.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -2399,7 +2669,7 @@ public final class ActionSpace {
     internal_static_ActionSpaceMessageV2_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_ActionSpaceMessageV2_descriptor,
-        new java.lang.String[] { "Attack", "Back", "Forward", "Jump", "Left", "Right", "Sneak", "Sprint", "Use", "Drop", "Inventory", "Hotbar1", "Hotbar2", "Hotbar3", "Hotbar4", "Hotbar5", "Hotbar6", "Hotbar7", "Hotbar8", "Hotbar9", "CameraPitch", "CameraYaw", "Commands", "Eat", });
+        new java.lang.String[] { "Attack", "Back", "Forward", "Jump", "Left", "Right", "Sneak", "Sprint", "Use", "Drop", "Inventory", "Hotbar1", "Hotbar2", "Hotbar3", "Hotbar4", "Hotbar5", "Hotbar6", "Hotbar7", "Hotbar8", "Hotbar9", "CameraPitch", "CameraYaw", "Commands", "Eat", "ResetWorldSeed", "Ticks", "OmitDiagnostics", });
     descriptor.resolveAllFeaturesImmutable();
   }
 

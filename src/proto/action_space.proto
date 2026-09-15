@@ -34,4 +34,8 @@ message ActionSpaceMessageV2 {
 
   // Use held food directly, without block/entity interaction (mc121).
   bool eat = 24;
+  optional sint64 reset_world_seed = 25;
+  // Zero means a single tick. A batch stops early on death or completed eat.
+  uint32 ticks = 26;
+  bool omit_diagnostics = 27;
 }

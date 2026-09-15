@@ -9,9 +9,13 @@
     "EntityCollisionDetectorMixin",
     "RenderMixin",
     "SaveWorldMixin",
+    "ServerShutdownChunkBudgetMixin",
     "ServerPlayNetworkHandlerDisableSpamChecker",
     "ItemPickupMixin",
-    "PlayerEventMixin"
+    "PlayerEventMixin",
+    "SurvivalHungerMixin",
+    "SurvivalZombieMixin",
+    "SurvivalBerryMixin"
   ],
   "client": [
     "ChatVisibleMessageAccessor",

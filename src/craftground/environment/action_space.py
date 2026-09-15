@@ -81,6 +81,11 @@ def action_v2_dict_to_message(
     action_space.sprint = action_v2["sprint"]
     action_space.use = action_v2["use"]
     action_space.eat = action_v2["eat"]
+    ticks = action_v2.get("ticks", 1)
+    if type(ticks) is not int or not 1 <= ticks <= 45:
+        raise ValueError("ticks must be an integer in [1, 45]")
+    action_space.ticks = ticks
+    action_space.omit_diagnostics = action_v2.get("omit_diagnostics", False)
     action_space.drop = action_v2["drop"]
     action_space.inventory = action_v2["inventory"]
     action_space.hotbar_1 = action_v2["hotbar.1"]

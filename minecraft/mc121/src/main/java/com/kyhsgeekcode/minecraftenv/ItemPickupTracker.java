@@ -13,6 +13,8 @@ public final class ItemPickupTracker {
                 .merge(item, count, Integer::sum);
     }
 
+    public static void clear() { COUNTS.clear(); }
+
     public static Map<String, Integer> get(UUID player) {
         return COUNTS.getOrDefault(player, Map.of());
     }

@@ -72,8 +72,13 @@ class CraftGroundEnvironment(gym.Env):
         profile: bool = False,
         profile_jni: bool = False,
         runtime_dir: Optional[str] = None,
+        launch_command: Optional[List[str]] = None,
     ):
         self.action_space_version = action_space_version
+        if launch_command is not None and (not isinstance(launch_command, list) or not launch_command
+                or any(not isinstance(arg, str) or not arg or '\x00' in arg for arg in launch_command)):
+            raise ValueError('launch_command must be a nonempty argv list')
+        self.launch_command = launch_command
         self.action_space = declare_action_space(action_space_version)
         self.observation_space = declare_observation_space(
             initial_env.imageSizeX, initial_env.imageSizeY
@@ -173,6 +178,22 @@ class CraftGroundEnvironment(gym.Env):
         final_obs = self.convert_observation_v2(res)
         return final_obs, final_obs
 
+    def reset_world(self, seed: int):
+        """Rebuild a fresh mc121 world through the existing JVM and IPC connection."""
+        from craftground.proto.action_space_pb2 import ActionSpaceMessageV2
+        if not self.is_alive:
+            raise RuntimeError("native JVM exited; cannot reset world")
+        self.initial_env_message.seed = str(seed)
+        self.queued_commands.clear()
+        self.ipc.send_action(ActionSpaceMessageV2(reset_world_seed=seed))
+        previous_timeout = self.ipc.sock.gettimeout()
+        self.ipc.sock.settimeout(300)
+        try:
+            observation = self.convert_observation_v2(self.ipc.read_observation(wait=False))
+        finally:
+            self.ipc.sock.settimeout(previous_timeout)
+        return observation, observation
+
     def convert_observation_v2(
         self, res: ObservationSpaceMessage
     ) -> Dict[str, Union[np.ndarray, "torch.Tensor", ObservationSpaceMessage]]:
@@ -257,14 +278,16 @@ class CraftGroundEnvironment(gym.Env):
                 pass
                 # self.update_override_resolutions(options_txt_path)
 
-        if os.name == "nt":
+        if self.launch_command is not None:
+            cmd = self.launch_command.copy()
+        elif os.name == "nt":
             cmd = f".\\gradlew runClient -w --no-daemon"
         else:
             cmd = f"./gradlew runClient -w --no-daemon"  #  --args="--width {self.initial_env.imageSizeX} --height {self.initial_env.imageSizeY}"'
         if self.use_vglrun:
-            cmd = f"vglrun {cmd}"
+            cmd = ['vglrun', *cmd] if isinstance(cmd, list) else f"vglrun {cmd}"
             if self.no_threaded_optimizations:  # __GL_THREADED_OPTIMIZATIONS=0
-                cmd = f"__GL_THREADED_OPTIMIZATIONS=0 {cmd}"
+                my_env['__GL_THREADED_OPTIMIZATIONS'] = '0'
         if self.ld_preload:
             my_env["LD_PRELOAD"] = self.ld_preload
         if self.profile_jni:
@@ -273,8 +296,8 @@ class CraftGroundEnvironment(gym.Env):
 
         # Launch the server
         kwargs = dict(
-            cwd=self.env_path,
-            shell=True,
+            cwd=(self.runtime_dir or self.env_path) if self.launch_command is not None else self.env_path,
+            shell=not isinstance(cmd, list),
             stdout=subprocess.DEVNULL if not self.verbose_gradle else None,
             env=my_env,
         )

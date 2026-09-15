@@ -104,12 +104,18 @@ class MinecraftEnv :
     private var resetPhase: ResetPhase = ResetPhase.END_RESET
     private var deathMessageCollector: GetMessagesInterface? = null
 
-    private val tickSynchronizer = TickSynchronizer()
+    private var tickSynchronizer = TickSynchronizer()
+    private lateinit var initializer: EnvironmentInitializer
+    private var pendingWorldSeed: Long? = null
+    private var remainingActionTicks = 0
+    private var repeatedAction = ActionSpaceMessageV2.getDefaultInstance()
+    private var ateAtActionStart = 0
+    private var omitDiagnostics = false
     private val csvLogger = CsvLogger("java_log.csv", enabled = false, profile = false)
     //    private var serverPlayerEntity: ServerPlayerEntity? = null
 
     private val variableCommandsAfterReset = mutableListOf<String>()
-    private var skipSync = false
+    @Volatile private var skipSync = false
     private var ioPhase = IOPhase.BEGINNING
     private var useSharedMemory = false
     private var registryWritten = false
@@ -212,9 +218,36 @@ class MinecraftEnv :
         ioPhase = IOPhase.GOT_INITIAL_ENVIRONMENT_SHOULD_SEND_OBSERVATION
         resetPhase = ResetPhase.WAIT_INIT_ENDS
         csvLogger.log("Initial environment read; $ioPhase $resetPhase")
-        val initializer = EnvironmentInitializer(initialEnvironment, csvLogger)
+        initializer = EnvironmentInitializer(initialEnvironment, csvLogger)
         ClientTickEvents.START_CLIENT_TICK.register(
             ClientTickEvents.StartTick { client: MinecraftClient ->
+                pendingWorldSeed?.let { seed ->
+                    pendingWorldSeed = null
+                    remainingActionTicks = 0
+                    omitDiagnostics = false
+                    KeyboardInfo.onAction(ActionSpaceMessageV2.getDefaultInstance())
+                    MouseInfo.onAction(ActionSpaceMessageV2.getDefaultInstance())
+                    val oldPath = client.server?.getSavePath(WorldSavePath.ROOT)?.normalize()
+                    // The old server must leave its tick wait before disconnect joins it.
+                    skipSync = true
+                    tickSynchronizer.terminate()
+                    client.world?.disconnect()
+                    client.disconnect(net.minecraft.client.gui.screen.TitleScreen())
+                    oldPath?.deleteRecursively()
+                    ItemPickupTracker.clear()
+                    PlayerEventTracker.clear()
+                    chatList.clear()
+                    client.inGameHud.chatHud.clear(true)
+                    deathMessageCollector = null
+                    entityListener?.clear()
+                    soundListener?.clear()
+                    variableCommandsAfterReset.clear()
+                    tickSynchronizer = TickSynchronizer()
+                    initialEnvironment = initialEnvironment.toBuilder().setSeed(seed.toString()).build()
+                    initializer = EnvironmentInitializer(initialEnvironment, csvLogger)
+                    resetPhase = ResetPhase.WAIT_INIT_ENDS
+                    ioPhase = IOPhase.GOT_INITIAL_ENVIRONMENT_SHOULD_SEND_OBSERVATION
+                }
                 if (!registryWritten) {
                     val items = Registries.ITEM.sortedBy { Registries.ITEM.getRawId(it) }
                         .map { Registries.ITEM.getId(it).toString() }
@@ -280,7 +313,15 @@ class MinecraftEnv :
                 csvLogger.profileStartPrint(
                     "Minecraft_env/onInitialize/EndWorldTick/SendObservation",
                 )
-                if (ioPhase ==
+                if (remainingActionTicks > 0) {
+                    remainingActionTicks--
+                    val player = MinecraftClient.getInstance().player!!
+                    if (player.isDead || (repeatedAction.eat &&
+                        PlayerEventTracker.get(player.uuid).getOrDefault("ate/minecraft:sweet_berries", 0) > ateAtActionStart)) {
+                        remainingActionTicks = 0
+                    }
+                }
+                if (remainingActionTicks > 0 || ioPhase ==
                     IOPhase.GOT_INITIAL_ENVIRONMENT_SENT_OBSERVATION_SKIP_SEND_OBSERVATION ||
                     ioPhase == IOPhase.SENT_OBSERVATION_SHOULD_READ_ACTION
                 ) {
@@ -337,6 +378,7 @@ class MinecraftEnv :
         messageIO: MessageIO,
     ) {
         val client = MinecraftClient.getInstance()
+        if (pendingWorldSeed != null) return
         soundListener!!.onTick()
         if (client.isPaused) return
         val player = client.player ?: return
@@ -385,8 +427,24 @@ class MinecraftEnv :
         try {
             csvLogger.log("Will Read action")
             csvLogger.profileStartPrint("Minecraft_env/onInitialize/ClientWorldTick/ReadAction")
-            val action = messageIO.readAction()
+            val continuing = remainingActionTicks > 0
+            val action = if (continuing) repeatedAction else messageIO.readAction()
             csvLogger.profileEndPrint("Minecraft_env/onInitialize/ClientWorldTick/ReadAction")
+            if (action.hasResetWorldSeed()) {
+                pendingWorldSeed = action.resetWorldSeed
+                skipSync = true
+                tickSynchronizer.terminate()
+                ioPhase = IOPhase.SENT_OBSERVATION_SHOULD_READ_ACTION
+                return
+            }
+            if (!continuing) {
+                require(action.ticks in 0..45) { "ticks must be in [0, 45]" }
+                remainingActionTicks = maxOf(1, action.ticks)
+                repeatedAction = action.toBuilder().clearCommands()
+                    .setCameraYaw(0f).setCameraPitch(0f).setDrop(false).build()
+                ateAtActionStart = PlayerEventTracker.get(player.uuid).getOrDefault("ate/minecraft:sweet_berries", 0)
+                omitDiagnostics = action.omitDiagnostics
+            }
             ioPhase = IOPhase.READ_ACTION_SHOULD_SEND_OBSERVATION
             csvLogger.log("Read action done; $ioPhase")
             skipSync = false
@@ -528,6 +586,10 @@ class MinecraftEnv :
             csvLogger.log("Player is null")
             return
         }
+        // During a fresh-world join the client player can precede server
+        // registration. Keep the observation pending until both are ready.
+        val server = client.server ?: return
+        val serverPlayer = server.playerManager.getPlayer(player.uuid) ?: return
         if (FramebufferCapturer.checkGLEW()) {
             printWithTime("GLEW initialized")
         } else {
@@ -699,11 +761,11 @@ class MinecraftEnv :
                     saturationLevel = player.hungerManager.saturationLevel.toDouble()
                     isDead = player.isDead
                     selectedSlot = player.inventory.selectedSlot
-                    worldSeed = client.server!!.overworld.seed
-                    timeOfDay = client.server!!.overworld.timeOfDay
+                    worldSeed = server.overworld.seed
+                    timeOfDay = server.overworld.timeOfDay
                     clientTimeOfDay = world.timeOfDay
                     // Read completed integrated-server ticks, not delayed REQUEST_STATS replies.
-                    val nativeStats = client.server!!.playerManager.getPlayer(player.uuid)!!.statHandler
+                    val nativeStats = serverPlayer.statHandler
                     for (item in Registries.ITEM) {
                         val used = nativeStats.getStat(Stats.USED.getOrCreateStat(item))
                         val id = Registries.ITEM.getId(item).toString()
@@ -712,6 +774,10 @@ class MinecraftEnv :
                     pickedUpItems.putAll(ItemPickupTracker.get(player.uuid))
                     miscStatistics["player_events_version"] = 1
                     miscStatistics["survival_actions_version"] = 2
+                    miscStatistics["survival_body_version"] = 2
+                    miscStatistics["survival_regrowth_version"] = 2
+                    miscStatistics["world_reset_version"] = 1
+                    miscStatistics["batch_ticks_version"] = 1
                     miscStatistics.putAll(PlayerEventTracker.get(player.uuid))
                     val allItems =
                         sequenceOf(
@@ -723,7 +789,7 @@ class MinecraftEnv :
                         allItems.map { it.toMessage() }.asIterable(),
                     )
 
-                    if (initialEnvironment.requestRaycast) {
+                    if (!omitDiagnostics && initialEnvironment.requestRaycast) {
                         raycastResult = player.raycast(100.0, 1.0f, false).toMessage(world)
                     } else {
                         // Optimized: dummy hit result
@@ -750,13 +816,13 @@ class MinecraftEnv :
                         miscStatistics[miscStatKey] =
                             nativeStats.getStat(Stats.CUSTOM.getOrCreateStat(key))
                     }
-                    entityListener?.run {
+                    if (!omitDiagnostics) entityListener?.run {
                         for (entity in entities) {
                             // notify where entity is, what it is (supervised)
                             visibleEntities.add(entity.toMessage())
                         }
                     }
-                    for (distance in initialEnvironment.surroundingEntityDistancesList) {
+                    if (!omitDiagnostics) for (distance in initialEnvironment.surroundingEntityDistancesList) {
                         val distanceDouble = distance.toDouble()
                         val entitiesWithinDistanceMessage =
                             entitiesWithinDistance {
@@ -775,7 +841,7 @@ class MinecraftEnv :
                     //                    bobberThrown = serverPlayerEntity?.fishHook != null
                     bobberThrown = player.fishHook != null
                     experience = player.totalExperience
-                    worldTime = client.server!!.overworld.time // Authoritative simulation ticks, no client clock corrections.
+                    worldTime = server.overworld.time // Authoritative simulation ticks, no client clock corrections.
                     lastDeathMessage = deathMessageCollector?.lastDeathMessage?.firstOrNull() ?: ""
                     image2 = imageByteString2
 
@@ -814,7 +880,7 @@ class MinecraftEnv :
                     // Populate biome info if needed
                     if (initialEnvironment.requiresBiomeInfo) {
                         println("Get world")
-                        val serverWorld = client.server!!.overworld
+                        val serverWorld = server.overworld
                         println("End Get world")
                         val currentPlayerBiome =
                             serverWorld.getGeneratorStoredBiome(
@@ -858,7 +924,7 @@ class MinecraftEnv :
                     isInLava = player.isInLava
                     submergedInLava = player.isSubmergedIn(FluidTags.LAVA)
 
-                    if (initialEnvironment.requiresHeightmap) {
+                    if (!omitDiagnostics && initialEnvironment.requiresHeightmap) {
                         val heightMapProvider = HeightMapProvider()
                         val heightMap = heightMapProvider.getHeightMap(world, player.blockPos, 1)
                         for (heightMapInfo in heightMap) {
@@ -1011,6 +1077,16 @@ class MinecraftEnv :
         csvLogger.log("Running command: $command")
         if (command.startsWith("/")) {
             command = command.substring(1)
+        }
+        if (command.startsWith("sethealth ")) {
+            val health = command.substringAfter("sethealth ").trim().toFloat()
+            require(health.isFinite() && health > 0 && health <= 20)
+            val server = MinecraftClient.getInstance().server ?: error("sethealth: server missing")
+            server.execute {
+                val target = server.playerManager.getPlayer(player.uuid) ?: error("sethealth: player missing")
+                target.health = health
+            }
+            return
         }
         if (command.startsWith("setfood ")) {
             val level = command.substringAfter("setfood ").trim().toInt()
