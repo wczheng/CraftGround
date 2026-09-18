@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import re
 import shutil
 import signal
@@ -190,6 +191,17 @@ class CraftGroundEnvironment(gym.Env):
         self.ipc.sock.settimeout(300)
         try:
             observation = self.convert_observation_v2(self.ipc.read_observation(wait=False))
+        except TimeoutError as error:
+            dump = Path(self.runtime_dir) / f'reset-{seed}-threads.txt'
+            try:
+                jcmd = Path(os.environ['JAVA_HOME']) / 'bin/jcmd'
+                with dump.open('w') as handle:
+                    subprocess.run([str(jcmd), str(self.process.pid), 'Thread.print', '-l'],
+                                   stdout=handle, stderr=subprocess.STDOUT, timeout=15, check=False)
+            except (OSError, KeyError, subprocess.TimeoutExpired) as diagnostic_error:
+                self.logger.log(f'Thread dump failed: {diagnostic_error}')
+            raise TimeoutError(f'world reset timed out: port={self.ipc.port}, seed={seed}; '
+                               f'client logs and thread dump: {dump.parent}') from error
         finally:
             self.ipc.sock.settimeout(previous_timeout)
         return observation, observation
@@ -257,6 +269,8 @@ class CraftGroundEnvironment(gym.Env):
     def start_server(self, seed: int):
         # Prepare command
         my_env = os.environ.copy()
+        # Eager attach avoids HotSpot's lazy marker file on root-squashed NFS cwd.
+        my_env['JAVA_TOOL_OPTIONS'] = (my_env.get('JAVA_TOOL_OPTIONS', '') + ' -XX:+StartAttachListener').strip()
         my_env["PORT"] = str(self.ipc.port)
         my_env["USE_SHARED_MEMORY"] = str(int(self.use_shared_memory))
         my_env["VERBOSE"] = str(int(self.verbose_jvm))
