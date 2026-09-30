@@ -92,7 +92,7 @@ class ObservationConverter:
             obs_1, obs_2 = None, None
             img_1, img_2 = None, None
             obs_1, img_1 = self.convert_png_observation(observation.image)
-            if self.is_binocular:
+            if observation.image_2:
                 obs_2, img_2 = self.convert_png_observation(observation.image_2)
             self.last_observations[0], self.last_observations[1] = obs_1, obs_2
             self.last_images[0], self.last_images[1] = img_1, img_2
@@ -101,7 +101,7 @@ class ObservationConverter:
             obs_1, obs_2 = None, None
             img_1, img_2 = None, None
             obs_1 = self.convert_raw_observation(observation.image)
-            if self.is_binocular:
+            if observation.image_2:
                 obs_2 = self.convert_raw_observation(observation.image_2)
             self.last_observations[0], self.last_observations[1] = obs_1, obs_2
             return (obs_1, obs_2)

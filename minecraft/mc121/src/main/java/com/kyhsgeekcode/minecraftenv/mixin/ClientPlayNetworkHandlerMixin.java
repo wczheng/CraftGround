@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.DeathMessageS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -15,13 +16,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientPlayNetworkHandlerMixin implements GetMessagesInterface {
   @Shadow private ClientWorld world;
 
+  @Unique private volatile String lastDeathMessage = "";
+
+  @Override
+  public String getLastDeathMessage() {
+    return lastDeathMessage;
+  }
+
+  @Override
+  public void setLastDeathMessage(String message) {
+    lastDeathMessage = message;
+  }
+
   @Inject(method = "onDeathMessage", at = @At("HEAD"), cancellable = false)
   public void onDeathMessage(DeathMessageS2CPacket packet, CallbackInfo ci) {
     Entity entity = this.world.getEntityById(packet.playerId());
     if (entity == ((ClientCommonNetworkHandlerClientAccessor) this).getClient().player) {
-      var message = packet.message();
-      this.lastDeathMessage.clear();
-      this.lastDeathMessage.add(message.getString());
+      setLastDeathMessage(packet.message().getString());
     }
   }
 }

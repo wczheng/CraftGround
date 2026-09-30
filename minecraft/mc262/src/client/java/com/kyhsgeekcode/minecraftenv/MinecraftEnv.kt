@@ -940,7 +940,7 @@ class MinecraftEnv :
                     bobberThrown = player.fishing != null
                     experience = player.totalExperience
                     worldTime = world.gameTime // world tick, monotonic increasing
-                    lastDeathMessage = deathMessageCollector?.lastDeathMessage?.firstOrNull() ?: ""
+                    lastDeathMessage = deathMessageCollector?.lastDeathMessage ?: ""
                     image2 = imageByteString2
                     ipcHandle = FramebufferCapturer.ipcHandle
 

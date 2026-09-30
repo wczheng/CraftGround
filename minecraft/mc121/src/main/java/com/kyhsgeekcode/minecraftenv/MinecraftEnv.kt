@@ -27,6 +27,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.MinecraftClient.IS_SYSTEM_MAC
 import net.minecraft.client.gui.screen.DeathScreen
 import net.minecraft.client.network.ClientPlayerEntity
+import net.minecraft.client.option.Perspective
 import net.minecraft.client.render.ChunkBuilderMode
 import net.minecraft.client.render.BackgroundRenderer
 import net.minecraft.client.world.ClientWorld
@@ -738,8 +739,12 @@ class MinecraftEnv :
                         MouseInfo.mouseX.toInt(),
                         MouseInfo.mouseY.toInt(),
                     )
-                // ByteString.copyFrom(image1ByteArray)
-                imageByteString2 = ByteString.EMPTY // ByteString.copyFrom(image1ByteArray)
+                imageByteString2 =
+                    if (System.getenv("VAFM_GOD_VIEW") == "1") {
+                        captureGodView(client, player, initialEnvironment, pos)
+                    } else {
+                        ByteString.EMPTY
+                    }
                 csvLogger.profileEndPrint(
                     "Minecraft_env/onInitialize/EndWorldTick/SendObservation/Prepare/SingleEye/ByteString",
                 )
@@ -842,7 +847,7 @@ class MinecraftEnv :
                     bobberThrown = player.fishHook != null
                     experience = player.totalExperience
                     worldTime = server.overworld.time // Authoritative simulation ticks, no client clock corrections.
-                    lastDeathMessage = deathMessageCollector?.lastDeathMessage?.firstOrNull() ?: ""
+                    lastDeathMessage = deathMessageCollector?.lastDeathMessage ?: ""
                     image2 = imageByteString2
 
                     if (initialEnvironment.requiresSurroundingBlocks) {
@@ -1127,6 +1132,56 @@ fun ClientPlayerEntity.checkIfCameraBlocked(): Boolean {
                 VoxelShapes.cuboid(box),
                 BooleanBiFunction.AND,
             )
+    }
+}
+
+fun captureGodView(
+    client: MinecraftClient,
+    player: ClientPlayerEntity,
+    initialEnvironment: InitialEnvironment.InitialEnvironmentMessage,
+    pos: Vec3d,
+): ByteString {
+    val buffer = client.framebuffer
+    val oldPrevX = player.prevX
+    val oldPrevY = player.prevY
+    val oldPrevZ = player.prevZ
+    val oldPitch = player.pitch
+    val oldPrevPitch = player.prevPitch
+    val oldYaw = player.yaw
+    val oldPrevYaw = player.prevYaw
+    val oldPerspective = client.options.perspective
+    // The first-person frame is already captured. This render looks down from above the same tick.
+    player.prevX = pos.x
+    player.prevY = pos.y + 24.0
+    player.prevZ = pos.z
+    player.pitch = 90f
+    player.prevPitch = 90f
+    player.prevYaw = oldYaw
+    client.options.perspective = Perspective.THIRD_PERSON_BACK
+    try {
+        render(client)
+        return FramebufferCapturer.captureFramebuffer(
+            buffer.colorAttachment,
+            buffer.fbo,
+            buffer.textureWidth,
+            buffer.textureHeight,
+            initialEnvironment.imageSizeX,
+            initialEnvironment.imageSizeY,
+            initialEnvironment.screenEncodingMode,
+            false,
+            MouseInfo.showCursor,
+            MouseInfo.mouseX.toInt(),
+            MouseInfo.mouseY.toInt(),
+        )
+    } finally {
+        player.prevX = oldPrevX
+        player.prevY = oldPrevY
+        player.prevZ = oldPrevZ
+        player.pitch = oldPitch
+        player.prevPitch = oldPrevPitch
+        player.yaw = oldYaw
+        player.prevYaw = oldPrevYaw
+        client.options.perspective = oldPerspective
     }
 }
 
