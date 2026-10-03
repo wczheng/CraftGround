@@ -555,9 +555,10 @@ class MinecraftEnv :
             "Minecraft_env/onInitialize/ClientWorldTick/ReadAction/ApplyAction",
         )
         if (actionDict.cameraYaw != 0.0f || actionDict.cameraPitch != 0.0f) {
-            val dy = actionDict.cameraPitch * 20.0 / 3
-            val dx = actionDict.cameraYaw * 20.0 / 3
-            MouseInfo.moveMouseBy(dx.toInt(), dy.toInt())
+            // Rotate now, as vanilla Mouse.updateMouse does at default sensitivity (100 units = 15°).
+            // A synthetic cursor move is consumed only by the next render frame, after a one-tick
+            // batch has already been observed.
+            player.changeLookDirection(actionDict.cameraYaw * 20.0 / 3, actionDict.cameraPitch * 20.0 / 3)
         }
 
         // Handle key press
