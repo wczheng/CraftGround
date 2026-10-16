@@ -33,7 +33,9 @@
     "RenderLayerTrianglesMixin",
     "RenderSystemPollEventsInvoker",
     "RenderTickCounterAccessor",
+    "TerrainDirtyMixin",
     "TickSpeedMixin",
+    "VanillaFrameMixin",
     "WindowOffScreenMixin",
     "WindowSizeAccessor",
     "WorldRendererCallEntityRenderMixin"
