@@ -122,6 +122,7 @@ class MinecraftEnv :
     private var registryWritten = false
 
     override fun onInitialize() {
+        MovingFood.register()
         val isLdPreloadSet = System.getenv("LD_PRELOAD")
         if (isLdPreloadSet != null) {
             println("LD_PRELOAD is set: $isLdPreloadSet")
@@ -785,6 +786,7 @@ class MinecraftEnv :
                     miscStatistics["world_reset_version"] = 1
                     miscStatistics["batch_ticks_version"] = 1
                     miscStatistics.putAll(PlayerEventTracker.get(player.uuid))
+                    miscStatistics.putAll(MovingFood.statistics(server.overworld))
                     val allItems =
                         sequenceOf(
                             player.inventory.main,
