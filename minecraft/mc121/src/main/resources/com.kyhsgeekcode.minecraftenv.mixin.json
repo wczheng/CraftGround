@@ -29,6 +29,7 @@
     "GameRendererDepthCaptureMixin",
     "GammaMixin",
     "InputUtilMixin",
+    "IndigoChunkReleaseMixin",
     "MouseXYAccessor",
     "RenderLayerTrianglesMixin",
     "RenderSystemPollEventsInvoker",

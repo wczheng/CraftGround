@@ -38,6 +38,7 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.registry.tag.FluidTags
 import net.minecraft.server.MinecraftServer
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.stat.Stats
 import net.minecraft.util.Identifier
 import net.minecraft.util.Util
@@ -58,6 +59,7 @@ import java.nio.channels.SocketChannel
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.copyToRecursively
 import kotlin.io.path.deleteRecursively
 import kotlin.math.cos
 import kotlin.math.sin
@@ -108,10 +110,25 @@ class MinecraftEnv :
     private var tickSynchronizer = TickSynchronizer()
     private lateinit var initializer: EnvironmentInitializer
     private var pendingWorldSeed: Long? = null
+    private var pendingSnapshot: String? = null
+    private var snapshotWorld: Path? = null
+    private var snapshotName: String? = null
+    private var snapshotSeed: Long? = null
     private var remainingActionTicks = 0
     private var repeatedAction = ActionSpaceMessageV2.getDefaultInstance()
     private var ateAtActionStart = 0
     private var omitDiagnostics = false
+    private data class BodySample(val health: Float, val food: Int, val saturation: Float,
+                                  val exhaustion: Float, val dead: Boolean)
+    private var bodyTraceEnabled = false
+    private var bodyBefore: BodySample? = null
+    private var bodyEndpoint: BodySample? = null
+    private val bodyTrace = mutableListOf<BodySample>()
+
+    private fun sampleBody(player: ServerPlayerEntity) = BodySample(
+        player.health, player.hungerManager.foodLevel, player.hungerManager.saturationLevel,
+        player.hungerManager.exhaustion, player.isDead,
+    )
     private val csvLogger = CsvLogger("java_log.csv", enabled = false, profile = false)
     //    private var serverPlayerEntity: ServerPlayerEntity? = null
 
@@ -225,17 +242,32 @@ class MinecraftEnv :
             ClientTickEvents.StartTick { client: MinecraftClient ->
                 pendingWorldSeed?.let { seed ->
                     pendingWorldSeed = null
+                    val snapshot = pendingSnapshot
+                    pendingSnapshot = null
                     remainingActionTicks = 0
                     omitDiagnostics = false
                     KeyboardInfo.onAction(ActionSpaceMessageV2.getDefaultInstance())
                     MouseInfo.onAction(ActionSpaceMessageV2.getDefaultInstance())
                     val oldPath = client.server?.getSavePath(WorldSavePath.ROOT)?.normalize()
+                    val levelName = client.server?.saveProperties?.levelName
                     // The old server must leave its tick wait before disconnect joins it.
                     skipSync = true
                     tickSynchronizer.terminate()
                     client.world?.disconnect()
                     client.disconnect(net.minecraft.client.gui.screen.TitleScreen())
+                    if (snapshot == "save") {
+                        check(snapshotWorld == null) { "Baseline already exists; create a new client to replace it" }
+                        val baseline = requireNotNull(oldPath).parent.parent.resolve("vafm-baseline")
+                        check(!Files.exists(baseline)) { "Baseline path already exists" }
+                        oldPath.copyToRecursively(baseline, followLinks = false, overwrite = false)
+                        snapshotWorld = baseline
+                        snapshotName = requireNotNull(levelName)
+                        snapshotSeed = seed
+                    }
                     oldPath?.deleteRecursively()
+                    if (snapshot != null) {
+                        requireNotNull(snapshotWorld).copyToRecursively(requireNotNull(oldPath), followLinks = false, overwrite = false)
+                    }
                     ItemPickupTracker.clear()
                     PlayerEventTracker.clear()
                     chatList.clear()
@@ -245,7 +277,8 @@ class MinecraftEnv :
                     soundListener?.clear()
                     variableCommandsAfterReset.clear()
                     tickSynchronizer = TickSynchronizer()
-                    initialEnvironment = initialEnvironment.toBuilder().setSeed(seed.toString()).build()
+                    initialEnvironment = initialEnvironment.toBuilder().setSeed(seed.toString())
+                        .setLevelDisplayNameToPlay(if (snapshot != null) requireNotNull(snapshotName) else "").build()
                     initializer = EnvironmentInitializer(initialEnvironment, csvLogger)
                     resetPhase = ResetPhase.WAIT_INIT_ENDS
                     ioPhase = IOPhase.GOT_INITIAL_ENVIRONMENT_SHOULD_SEND_OBSERVATION
@@ -318,7 +351,7 @@ class MinecraftEnv :
                 if (remainingActionTicks > 0) {
                     remainingActionTicks--
                     val player = MinecraftClient.getInstance().player!!
-                    if (player.isDead || (repeatedAction.eat &&
+                    if (player.isDead || MinecraftClient.getInstance().currentScreen != null || (repeatedAction.eat &&
                         PlayerEventTracker.get(player.uuid).getOrDefault("ate/minecraft:sweet_berries", 0) > ateAtActionStart)) {
                         remainingActionTicks = 0
                     }
@@ -360,6 +393,16 @@ class MinecraftEnv :
         )
         ServerTickEvents.END_SERVER_TICK.register(
             ServerTickEvents.EndTick { server: MinecraftServer ->
+                if (bodyTraceEnabled && !skipSync) {
+                    server.playerManager.playerList.firstOrNull()?.let { player ->
+                        val sample = sampleBody(player)
+                        bodyEndpoint = sample
+                        if (remainingActionTicks > 0) {
+                            check(bodyTrace.size < 45) { "native body trace exceeded action budget" }
+                            bodyTrace.add(sample)
+                        }
+                    }
+                }
                 // allow client to end tick
                 printWithTime("Notify server tick completion")
                 csvLogger.log("Notify server tick completion")
@@ -441,11 +484,17 @@ class MinecraftEnv :
             }
             if (!continuing) {
                 require(action.ticks in 0..45) { "ticks must be in [0, 45]" }
-                remainingActionTicks = maxOf(1, action.ticks)
+                remainingActionTicks = if (client.currentScreen != null) 1 else maxOf(1, action.ticks)
                 repeatedAction = action.toBuilder().clearCommands()
                     .setCameraYaw(0f).setCameraPitch(0f).setDrop(false).build()
                 ateAtActionStart = PlayerEventTracker.get(player.uuid).getOrDefault("ate/minecraft:sweet_berries", 0)
                 omitDiagnostics = action.omitDiagnostics
+                if (bodyTraceEnabled) {
+                    bodyTrace.clear()
+                    // Network handlers can change the player between completed ticks.
+                    // Attribute those changes to the next tick, starting at the last emitted endpoint.
+                    bodyBefore = bodyEndpoint ?: client.server?.playerManager?.getPlayer(player.uuid)?.let(::sampleBody)
+                }
             }
             ioPhase = IOPhase.READ_ACTION_SHOULD_SEND_OBSERVATION
             csvLogger.log("Read action done; $ioPhase")
@@ -490,7 +539,17 @@ class MinecraftEnv :
         client: MinecraftClient,
         player: ClientPlayerEntity,
     ): Boolean {
-        if (command == "respawn") {
+        if (command == "snapshot save" || command == "snapshot restore") {
+            check(command != "snapshot restore" || snapshotWorld != null) { "Save a baseline before restoring" }
+            check(command != "snapshot save" || snapshotWorld == null) { "Baseline already exists" }
+            pendingSnapshot = command.substringAfter("snapshot ")
+            pendingWorldSeed = if (command == "snapshot restore") requireNotNull(snapshotSeed)
+                else requireNotNull(client.server).overworld.seed
+            skipSync = true
+            tickSynchronizer.terminate()
+            ioPhase = IOPhase.SENT_OBSERVATION_SHOULD_READ_ACTION
+            return true
+        } else if (command == "respawn") {
             if (client.currentScreen is DeathScreen && player.isDead) {
                 player.requestRespawn()
                 sendSetScreenNull(client)
@@ -559,7 +618,12 @@ class MinecraftEnv :
             // Rotate now, as vanilla Mouse.updateMouse does at default sensitivity (100 units = 15°).
             // A synthetic cursor move is consumed only by the next render frame, after a one-tick
             // batch has already been observed.
-            player.changeLookDirection(actionDict.cameraYaw * 20.0 / 3, actionDict.cameraPitch * 20.0 / 3)
+            if (client.currentScreen != null) {
+                MouseInfo.moveMouseBy((actionDict.cameraYaw * 20.0 / 3).toInt(),
+                                     (actionDict.cameraPitch * 20.0 / 3).toInt())
+            } else {
+                player.changeLookDirection(actionDict.cameraYaw * 20.0 / 3, actionDict.cameraPitch * 20.0 / 3)
+            }
         }
 
         // Handle key press
@@ -784,9 +848,34 @@ class MinecraftEnv :
                     miscStatistics["survival_body_version"] = 2
                     miscStatistics["survival_regrowth_version"] = 2
                     miscStatistics["world_reset_version"] = 1
+                    miscStatistics["snapshot_reset/version"] = 2
                     miscStatistics["batch_ticks_version"] = 1
+                    miscStatistics["human_controls/version"] = 1
+                    miscStatistics["gui/open"] = if (client.currentScreen != null) 1 else 0
+                    miscStatistics["gui/mouse_x"] = MouseInfo.mouseX.toInt()
+                    miscStatistics["gui/mouse_y"] = MouseInfo.mouseY.toInt()
+                    miscStatistics["gui/width"] = client.window.width
+                    miscStatistics["gui/height"] = client.window.height
+                    miscStatistics["gui/scaled_width"] = client.window.scaledWidth
+                    miscStatistics["gui/scaled_height"] = client.window.scaledHeight
                     miscStatistics.putAll(PlayerEventTracker.get(player.uuid))
                     miscStatistics.putAll(MovingFood.statistics(server.overworld))
+                    if (bodyTraceEnabled) {
+                        miscStatistics["native_body/version"] = 1
+                        miscStatistics["native_body/count"] = bodyTrace.size
+                        for ((prefix, sample) in listOf("before" to bodyBefore, "end" to bodyEndpoint)) {
+                            if (sample == null) continue
+                            miscStatistics["native_body/$prefix/health_bits"] = sample.health.toRawBits()
+                            miscStatistics["native_body/$prefix/food"] = sample.food
+                            miscStatistics["native_body/$prefix/saturation_bits"] = sample.saturation.toRawBits()
+                            miscStatistics["native_body/$prefix/exhaustion_bits"] = sample.exhaustion.toRawBits()
+                            miscStatistics["native_body/$prefix/dead"] = if (sample.dead) 1 else 0
+                        }
+                        bodyTrace.forEachIndexed { index, sample ->
+                            miscStatistics["native_body/tick/$index/health_bits"] = sample.health.toRawBits()
+                            miscStatistics["native_body/tick/$index/food"] = sample.food
+                        }
+                    }
                     val allItems =
                         sequenceOf(
                             player.inventory.main,
@@ -1085,6 +1174,13 @@ class MinecraftEnv :
         csvLogger.log("Running command: $command")
         if (command.startsWith("/")) {
             command = command.substring(1)
+        }
+        if (command == "bodytrace on" || command == "bodytrace off") {
+            bodyTraceEnabled = command == "bodytrace on"
+            bodyTrace.clear()
+            bodyBefore = null
+            bodyEndpoint = null
+            return
         }
         if (command.startsWith("sethealth ")) {
             val health = command.substringAfter("sethealth ").trim().toFloat()

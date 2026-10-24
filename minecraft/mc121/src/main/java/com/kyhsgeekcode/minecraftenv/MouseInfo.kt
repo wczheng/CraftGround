@@ -79,11 +79,14 @@ object MouseInfo {
         dy: Int,
     ) {
         // dx와 dy의 절대값 계산 (정수로 변환)
-        val stepsX = Math.abs(dx)
-        val stepsY = Math.abs(dy)
+        val window = MinecraftClient.getInstance().window
+        val boundedX = ((mouseX + dx).coerceIn(0.0, (window.width-1).toDouble()) - mouseX).toInt()
+        val boundedY = ((mouseY + dy).coerceIn(0.0, (window.height-1).toDouble()) - mouseY).toInt()
+        val stepsX = Math.abs(boundedX)
+        val stepsY = Math.abs(boundedY)
         // dx와 dy의 이동 방향 계산
-        val stepX = if (dx > 0) 1 else -1
-        val stepY = if (dy > 0) 1 else -1
+        val stepX = if (boundedX > 0) 1 else -1
+        val stepY = if (boundedY > 0) 1 else -1
         // 최대 이동 횟수 계산 (더 큰 쪽을 기준으로 반복)
         val maxSteps = Math.max(stepsX, stepsY)
         // X와 Y를 번갈아 가며 이동
