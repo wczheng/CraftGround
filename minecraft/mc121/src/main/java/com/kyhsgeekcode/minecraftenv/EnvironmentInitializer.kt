@@ -45,7 +45,7 @@ class EnvironmentInitializer(
     private val initialEnvironment: InitialEnvironmentMessage,
     private val csvLogger: CsvLogger,
 ) {
-    private var hasRunInitWorld: Boolean = false
+    var hasRunInitWorld: Boolean = false
         private set
     var initWorldFinished: Boolean = false
         private set

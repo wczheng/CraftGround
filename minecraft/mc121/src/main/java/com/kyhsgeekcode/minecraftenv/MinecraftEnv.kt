@@ -255,6 +255,11 @@ class MinecraftEnv :
                     tickSynchronizer.terminate()
                     client.world?.disconnect()
                     client.disconnect(net.minecraft.client.gui.screen.TitleScreen())
+                    // Codec keys hold RegistryOps and every registry in the closed world.
+                    // Their values are soft, but the keys remain strong until eviction.
+                    // None of this world's encoded component cache can serve its replacement.
+                    val componentCache = com.kyhsgeekcode.minecraftenv.mixin.DataComponentTypesCacheAccessor.getCodecCache()
+                    (componentCache as com.kyhsgeekcode.minecraftenv.mixin.CodecCacheAccessor).entries.invalidateAll()
                     if (snapshot == "save") {
                         check(snapshotWorld == null) { "Baseline already exists; create a new client to replace it" }
                         val baseline = requireNotNull(oldPath).parent.parent.resolve("vafm-baseline")
@@ -431,6 +436,11 @@ class MinecraftEnv :
             sendSetScreenNull(client)
         }
         initializer.onWorldTick(client.server, client.inGameHud.chatHud, this, emptyList())
+        // Once initialization commands are queued, server progress must follow
+        // client ticks while their acknowledgement reaches the render thread.
+        // Leaving skipSync enabled here lets a busy client wait through thousands
+        // of unbudgeted native ticks at the requested high server tick rate.
+        if (initializer.hasRunInitWorld) skipSync = false
 
         when (resetPhase) {
             ResetPhase.WAIT_PLAYER_DEATH -> {
